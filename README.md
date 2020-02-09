@@ -18,8 +18,9 @@ ser verificado adecuadamente en estos momento cuando escribo el texto...**
 
 ##### Primero necesitamos Git
 
-Nos descargamos el instalador de git (asumiento que es Windows 7 o superior de 64 bits)
-[text](https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe)
+Nos descargamos el instalador de git (asumiento que es Windows 7 o superior de 64 bits) desde este link:
+
+[https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe](https://github.com/git-for-windows/git/releases/download/v2.25.0.windows.1/Git-2.25.0-64-bit.exe)
 
 Ejecutamos el instalador.
 
