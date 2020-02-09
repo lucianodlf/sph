@@ -1,0 +1,15 @@
+{
+    "name": "rafiki/sph",
+    "type": "project",
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.10",
+        "docopt/docopt": "1.0.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Luciano Delfino",
+            "email": "luciano.dlf@gmail.com"
+        }
+    ]
+}

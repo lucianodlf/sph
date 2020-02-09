@@ -1,0 +1,9 @@
+vendor/
+export/*.*
+export/*/
+!export/.gitkeep
+logs/*.*
+!logs/.gitkeep
+*.swp
+composer.lock
+testeo.xlsx
