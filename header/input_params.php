@@ -67,15 +67,187 @@ $input_params = Docopt::handle($doc, $aditional_params);
 
 $args = $input_params->args;
 
-
+// Get Config Params
 $hconfig = getDefaultConfigParams();
+
+// Get Config Default
+$gconfig = getDefaultGlobalConfig($hconfig);
+
+// Get ini config
+$parse_config = getConfigFile(CONFIG_PATH . 'sph.ini');
+
+var_dump($parse_config);
+
+/**
+ * ==============================================================================
+ * Validate and load params in config file ini
+ */
+if (is_array($parse_config)) {
+
+	// ======================= Section [main] ==================================
+	if (key_exists('main', $parse_config)) {
+
+		if (key_exists('default_timezone', $parse_config['main'])) {
+			$gconfig['DEFAULT_TIMEZONE'] = $parse_config['main']['default_timezone'];
+		}
+
+		//TODO: verificar si existe el directorio y si funciona el tipo de ruta
+		if (key_exists('input_path', $parse_config['main'])) {
+			$gconfig['INPUT_DIR_PATH'] = $parse_config['main']['input_path'];
+		}
+
+		if (key_exists('output_path', $parse_config['main'])) {
+			$gconfig['OUTPUT_DIR_PATH'] = $parse_config['main']['output_path'];
+		}
+
+		if (key_exists('date_format_read', $parse_config['main'])) {
+			$gconfig['DATE_FORMAT_READ'] = $parse_config['main']['date_format_read'];
+		}
+
+		if (key_exists('date_format_show', $parse_config['main'])) {
+			$gconfig['DATE_FORMAT_SHOW'] = $parse_config['main']['date_format_show'];
+		}
+
+		if (key_exists('range_read_input_file', $parse_config['main'])) {
+			$gconfig['RANGE_READ_INPUT_FILE'] = $parse_config['main']['range_read_input_file'];
+		}
+
+		if (key_exists('sort_order_input_file', $parse_config['main'])) {
+			$gconfig['SORT_ORDER_INPUT_FILE'] = $parse_config['main']['sort_order_input_file'];
+		}
+	}
+
+
+	// ======================= Section [debug] =================================
+	if (key_exists('debug', $parse_config)) {
+
+		if (key_exists('debug_mode', $parse_config['debug'])) {
+			$gconfig['DEBUG_MODE'] = $parse_config['debug']['debug_mode'];
+		}
+
+		if (key_exists('debug_only_code_user', $parse_config['debug'])) {
+			$gconfig['DEBUG_ONLY_CODE_USER'] = $parse_config['debug']['debug_only_code_user'];
+		}
+
+		if (key_exists('debug_count_max_user', $parse_config['debug'])) {
+			$gconfig['DEBUG_COUNT_MAX_USER'] = $parse_config['debug']['debug_count_max_user'];
+		}
+
+		if (key_exists('debug_only_intervals', $parse_config['debug'])) {
+			$gconfig['DEBUG_ONLY_INTERVALS'] = $parse_config['debug']['debug_only_intervals'];
+		}
+
+		if (key_exists('debug_count_max_interval_user', $parse_config['debug'])) {
+			$gconfig['DEBUG_COUNT_MAX_INTERVAL_USER'] = $parse_config['debug']['debug_count_max_interval_user'];
+		}
+
+		if (key_exists('debug_hidde_log_by_minute', $parse_config['debug'])) {
+			$gconfig['DEBUG_HIDDE_LOG_BY_MINUTE'] = $parse_config['debug']['debug_hidde_log_by_minute'];
+		}
+
+		if (key_exists('debug_range_datetime', $parse_config['debug'])) {
+			$gconfig['DEBUG_RANGE_DATETIME'] = $parse_config['debug']['debug_range_datetime'];
+		}
+
+		if (key_exists('verbose', $parse_config['debug'])) {
+			$gconfig['VERBOSE'] = $parse_config['debug']['verbose'];
+		}
+
+		if (key_exists('quiet', $parse_config['debug'])) {
+			$gconfig['QUIET'] = $parse_config['debug']['quiet'];
+		}
+	}
+
+
+
+	// ======================= Section [export] ================================
+	if (key_exists('export', $parse_config)) {
+
+		if (key_exists('export_excel', $parse_config['export'])) {
+			$gconfig['EXPORT_EXCEL'] = $parse_config['export']['export_excel'];
+		}
+	}
+
+
+
+	// ======================= Section [hparams] ================================
+	if (key_exists('hparams', $parse_config)) {
+
+		if (key_exists('hdia', $parse_config['hparams'])) {
+			$hconfig['HDIA'] = explode(',', $parse_config['hparams']['hdia']);
+		}
+
+		if (key_exists('hdiurnas', $parse_config['hparams'])) {
+			$hconfig['HDIURNAS'] = explode(',', $parse_config['hparams']['hdiurnas']);
+		}
+
+		if (key_exists('hdiurnas_ext', $parse_config['hparams'])) {
+			//TODO: continuar desde aqui....
+		}
+
+		if (key_exists('hnocturnas', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('hnocturnas_ext', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('h100', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('jlnormal_d', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('jlnormal_hs', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('jldif_d', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('jldif_hs', $parse_config['hparams'])) {
+		}
+
+		if (key_exists('nsabado', $parse_config['hparams'])) {
+		}
+	}
+
+
+
+	// ======================= Section [alerts] ================================
+	if (key_exists('alerts', $parse_config)) {
+
+		if (key_exists('max_hours_by_interval', $parse_config['alerts'])) {
+		}
+
+		if (key_exists('text_alert_sum', $parse_config['alerts'])) {
+		}
+
+		if (key_exists('text_alert_max', $parse_config['alerts'])) {
+		}
+
+		if (key_exists('text_alert_change_journal', $parse_config['alerts'])) {
+		}
+	}
+
+
+
+	// ======================= Section [feriados] ==============================
+	if (key_exists('feriados', $parse_config)) {
+
+		//TODO: tratamiento diferente.
+	}
+}
+
+
+
+die();
 
 define('CONFIG_PARAMS', $hconfig);
 
+
 /**
- * Validate input config params
+ * =============================================================================
+ * Validate params in arguments 
  */
-$gconfig = getDefaultGlobalConfig();
 
 // For specify INPUT FILE
 if (!is_null($args['INPUT'])) {
@@ -156,12 +328,12 @@ if ($args['-d'] || $args['--debug-mode']) {
 	if (!is_null($args['--d-interval-only'])) {
 
 		$intervals = explode(",", $args['--d-interval-only']);
-		
-		foreach($intervals as $interval){
 
-			$gconfig['DEBUG_ONLY_INTERVALS'][] = $interval;	
+		foreach ($intervals as $interval) {
+
+			$gconfig['DEBUG_ONLY_INTERVALS'][] = $interval;
 		}
-		
+
 
 		// For process MAX INTERVALS BY USER
 	} elseif (!is_null($args['--d-max-intervals'])) {

@@ -1,12 +1,18 @@
 <?php
 
-getConfigFile();
+function getConfigFile($cfg_file = NULL)
+{
 
-function getConfigFile($cfg_file = NULL){
-	
-	$parse_conf = parse_ini_file(CONFIG_PATH . 'sph.ini', TRUE, INI_SCANNER_TYPED);
+	if ($cfg_file === NULL) {
+		$cfg_file = CONFIG_PATH . 'sph.ini';
+	}
 
-	var_dump($parse_conf);
+	if (!file_exists($cfg_file)) {
+		echo "WARNING: Confing file not exist" . PHP_EOL;
+		return FALSE;
+	}
 
-	die();
+	$parse_conf = parse_ini_file($cfg_file, TRUE, INI_SCANNER_TYPED);
+
+	return $parse_conf;
 }
