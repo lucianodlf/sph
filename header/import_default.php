@@ -84,7 +84,7 @@ function prepareData($sheet_data)
 
 	$count_days_in_interval = 0;
 	$hours_data = [];
-	$count_row = 1;
+	$count_row = 0;
 
 	foreach ($sheet_data as $idx => $row) {
 
@@ -119,7 +119,7 @@ function prepareData($sheet_data)
 	}
 
 	//TODO: agregar un registro para mostrar en mensaje exportado o al final
-	if($count_row%2 != 0){
+	if($count_row%2 !== 0){
 
 		logeo("WARNING: El numero de registros procesados no es PAR", FALSE, TRUE, FALSE);
 	}
