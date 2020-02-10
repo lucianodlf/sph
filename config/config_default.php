@@ -9,6 +9,9 @@ define('HEADER_PATH', APP_BASE_PATH . 'header/');
 // Helpers path
 define('HELPER_PATH', APP_BASE_PATH . 'helper/');
 
+// Config path
+define('CONFIG_PATH', APP_BASE_PATH . 'config/');
+
 // Date refers execution
 define('DATE_EXECUTION', date('Ymd'));
 

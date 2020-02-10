@@ -3,7 +3,6 @@ ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 //error_reporting(E_ALL);
 
-
 require __DIR__ . '/config/config_default.php';
 require HEADER_PATH . 'header_default.php';
 
