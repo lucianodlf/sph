@@ -1,4 +1,5 @@
-### Separate Hours
+# Separate Hours
+---
 
 **NOTA: Para cualquiera que de con este proyecto, esta explicacion esta
 realizada teniendo en cuenta usuarios no experimentados con la terminal.**
@@ -12,11 +13,13 @@ ser verificado adecuadamente en estos momento cuando escribo el texto...**
 
 **En fin, fuiste advertida/o ;)**
 
+---
+
 **Los errores de ortografia son seyo personal ;)**
 
-#### Como instalamos en entorno Windows (Paso a paso) (Temporal)
+## Como instalamos en entorno Windows (Paso a paso) (Temporal)
 
-##### Primero necesitamos Git
+### Primero necesitamos Git
 
 Nos descargamos el instalador de git (asumiento que es Windows 7 o superior de 64 bits) desde este link:
 
@@ -39,7 +42,7 @@ acceso llamado __git-bash__
 De alguna forma tenemos que tener habierto Git bash y deberiamos ver una
 pantalla negra (generalmente) con un texto similar a este:
 
-```
+```bash
 Usuario@DESKTOP-GTBI7E8 MINGW64
 $
 ```
@@ -47,14 +50,16 @@ $
 Esto se suele llamar "el terminal" o "la consola"
 Si llegamos a este punto, estamos bien! Felicitaciones. podemos continuar...
 
-##### Ahora tenemos que preparar el entorno
+---
+
+### Ahora tenemos que preparar el entorno
 
 En los ejemplo, el signo __$__ no se debe escribir, el terminal lo coloca siempre.
 algo llamado _prompt_
 Tambien, **si hay texto con un __#__ (numeral), son comentarios, no se deben
 escribir.**
 
-```
+```bash
 # Con esto creamos un directorio en C:/ llamado 'sph'
 $ mkdir /c/sph
 
@@ -65,7 +70,8 @@ $ cd /c/sph/
 ```
 
 Ahora tenemos que clonar el proyecto
-```
+
+```bash
 # Clonamos con el comando git clone ...
 $ git clone https://gitlab.com/lucianoldf/sph.git
 
@@ -82,7 +88,8 @@ Updating files: 100% (107/107), done.
 
 Si todo salio bien, se nos tendria que creear otro directorio llamado
 __sph__ por lo que nos movemos a ese directorio
-```
+
+```bash
 $ cd sph/
 
 # Luego podemos usar el comando pwd para ver si estamos en la ruta correcta
@@ -97,7 +104,8 @@ Usuario@DESKTOP-GTBI7E8 MINGW64 /c/sph/sph (master)
 
 Si llegamos bien a este punto, vamos a user un pequeño scrip sh para 
 preparar el entorno
-```
+
+```bash
 $ ./install.sh
 listo ;)
 ```
@@ -107,7 +115,7 @@ podemos creer que todo esta bien y lo que vamos a hacer es cerrar Git Bash (el t
 y volverlo a abrir.
 Luego de abrirlo vamos a hacer lo siguiente:
 
-```
+```bash
 # Escrivimosd php -v para ver si se reconoce el comando php.
 # Es importante que veas el texto como se muestra en el ejemplo.
 $ php -v
@@ -129,7 +137,7 @@ En este punto, si todo esta bien (deseo que si), ya tenemos una terminal de
 Git Bash, con php y composer. Necesitamos instalar las dependencias con
 composer
 
-```
+```bash
 # Vamos a usar el comando 'composer.phar install'
 # Puede que demore un poco, pero tendriamos que ver como se muestra en el ejemplo.
 
@@ -148,17 +156,18 @@ phpoffice/phpspreadsheet suggests installing tecnickcom/tcpdf (Option for render
 phpoffice/phpspreadsheet suggests installing jpgraph/jpgraph (Option for rendering charts, or including charts with PDF or HTML Writers)
 Writing lock file
 Generating autoload files
-
 ```
 
 Ya casi estamos...
 
-##### Ahora solo nos queda probar que se ejecute bien el script php.
+---
+
+### Ahora solo nos queda probar que se ejecute bien el script php.
 
 Para probarlo, primero vamos a ejecutar el siguiente comando
 
-```
-$php sph.php --version
+```bash
+$ php sph.php --version
 1.0.0
 
 
@@ -228,7 +237,8 @@ con que usemos el comando _php sph.php_ sin ninguna otra opcion es suficiente.
 el archivo .xlsx mas nuevo, e intenta importar ese archivo.**
 
 Ejemplo:
-```
+
+```bash
 $ php sph.php
 2020-02-09 06:35:45: Start script
 2020-02-09 06:35:45: Import file: C:\sph\sph/import/planilla_horas_base_2.xlsx
@@ -269,12 +279,14 @@ Por defecto, ademas de mostrar el resultado por pantall, tambien se exporta en a
 en el directorio *./export/aqui-fecha-actual-en-formato-japones/..._export.xlsx*
 
 Otra forma de uso, es indicando especificamente que arhcivo se desea importar:j
-```
+
+```bash
 $ php sph.php --i-file=./import/planilla_horas_base_2.xlsx
 ```
 
 O tambien indicando el archivo que se importa y que se exporta:
-```
+
+```bash
 $ php sph.php --i-file=./import/planilla_input_test_2q_septimebre_2019.xlsx --o-file=./testeo.xlsx
 ```
 
