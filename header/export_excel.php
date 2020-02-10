@@ -236,7 +236,7 @@ function exportExcel($hours_data, $export_file)
 		$row_data++;
 	}
 
-	$write = IOFactory::createWriter($spreadsheet, 'Xls');
+	$write = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
 	$write->save($export_file);
 }

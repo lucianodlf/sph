@@ -111,7 +111,9 @@ function prepareData($sheet_data)
 			'name' => (string) strtoupper(trim($row['B'])),
 			'date' => (string) trim($row['C']),
 			'time' => (string) trim($row['D']),
-			'dateTime' => $day_date_time
+			'dateTime' => $day_date_time,
+			'is_feriado' => FALSE,
+			'is_date_fixed' => FALSE
 		];
 
 		$count_row++;

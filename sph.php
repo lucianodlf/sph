@@ -1,4 +1,9 @@
 <?php
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+//error_reporting(E_ALL);
+
+
 require __DIR__ . '/config/config_default.php';
 require HEADER_PATH . 'header_default.php';
 
@@ -218,6 +223,7 @@ foreach ($hours_data as $user_id => $user) {
 
 
 		// Validamos para otra alerta. Si la suma de las horas desglosadas no es igual al total de horas.
+		$sum_hours = 0;
 		$sum_hours += $minutes_interval_result['diurnas_n'];
 		$sum_hours += $minutes_interval_result['diurnas_e'];
 		$sum_hours += $minutes_interval_result['nocturnas_n'];
