@@ -14,7 +14,7 @@ logeo("Start script", FALSE, TRUE);
 // Import and prepare data to process
 $hours_data = import($GLOBALS['CONFIG']['INPUT_FILE']);
 
-logeo("Import file: {$GLOBALS['CONFIG']['INPUT_FILE']}", FALSE, TRUE);
+//logeo("Import file: {$GLOBALS['CONFIG']['INPUT_FILE']}", FALSE, TRUE);
 
 logeo("Process ...", FALSE, TRUE);
 
