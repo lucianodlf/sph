@@ -26,6 +26,8 @@ function import($input_file = NULL)
 function validateFileImport($input_file = NULL)
 {
 
+	logeo("File or dir input: $input_file");
+
 	if ($input_file !== NULL) {
 
 		if (file_exists($input_file)) {
@@ -37,12 +39,23 @@ function validateFileImport($input_file = NULL)
 		}
 	} else {
 
+		logeo("File not especify");
+		logeo("Search file in input dir: " . $GLOBALS['CONFIG']['INPUT_DIR_PATH']);
+
 		if (file_exists($GLOBALS['CONFIG']['INPUT_DIR_PATH']) && is_dir($GLOBALS['CONFIG']['INPUT_DIR_PATH'])) {
 
 			$files = customScanDir($GLOBALS['CONFIG']['INPUT_DIR_PATH'], '/^.*\.(xlsx)$/i', 'atime', 1);
 
+			logeo("files in diretory: " . json_encode($files));
+
+
+			if (strrpos($GLOBALS['CONFIG']['INPUT_DIR_PATH'], '/') !== strlen($GLOBALS['CONFIG']['INPUT_DIR_PATH']) - 1) {
+				$GLOBALS['CONFIG']['INPUT_DIR_PATH'] = $GLOBALS['CONFIG']['INPUT_DIR_PATH'] . '/';
+			}
+
 			if ($files && file_exists($GLOBALS['CONFIG']['INPUT_DIR_PATH'] . "{$files[0]}")) {
 
+				logeo("File more recent: " . $files[0]);
 				$GLOBALS['CONFIG']['INPUT_FILE'] = $GLOBALS['CONFIG']['INPUT_DIR_PATH'] . "{$files[0]}";
 
 				return $GLOBALS['CONFIG']['INPUT_DIR_PATH'] . "{$files[0]}";
@@ -111,7 +124,9 @@ function prepareData($sheet_data)
 			'name' => (string) strtoupper(trim($row['B'])),
 			'date' => (string) trim($row['C']),
 			'time' => (string) trim($row['D']),
-			'dateTime' => $day_date_time
+			'dateTime' => $day_date_time,
+			'is_feriado' => FALSE,
+			'is_date_fixed' => FALSE
 		];
 
 		$count_row++;
@@ -119,7 +134,7 @@ function prepareData($sheet_data)
 	}
 
 	//TODO: agregar un registro para mostrar en mensaje exportado o al final
-	if($count_row%2 !== 0){
+	if ($count_row % 2 !== 0) {
 
 		logeo("WARNING: El numero de registros procesados no es PAR", FALSE, TRUE, FALSE);
 	}

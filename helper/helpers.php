@@ -108,7 +108,7 @@ function returnObservationAlert($interval_data)
 
 	if ($interval_data['RESULT']['alert_max_hours']) {
 
-		$msg .= $interval_data['RESULT']['alert_max_hours_obs'] . " | ";
+		$msg .=  str_replace('{%MAX_HOURS_BY_INTERVAL_ALERT}', CONFIG_PARAMS['MAX_HOURS_BY_INTERVAL_ALERT'][0], $interval_data['RESULT']['alert_max_hours_obs']) . " | ";
 	}
 
 	if ($interval_data['RESULT']['alert_sum_hours']) {

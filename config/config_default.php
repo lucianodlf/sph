@@ -9,6 +9,9 @@ define('HEADER_PATH', APP_BASE_PATH . 'header/');
 // Helpers path
 define('HELPER_PATH', APP_BASE_PATH . 'helper/');
 
+// Config path
+define('CONFIG_PATH', APP_BASE_PATH . 'config/');
+
 // Date refers execution
 define('DATE_EXECUTION', date('Ymd'));
 
@@ -17,7 +20,7 @@ define('DATE_EXECUTION', date('Ymd'));
  * Sretea y retorna parametros
  * de configuracion global
  */
-function getDefaultGlobalConfig()
+function getDefaultGlobalConfig($hconfig = NULL)
 {
 
 	$gconfig['INPUT_DIR_PATH'] = APP_BASE_PATH . 'import/';
@@ -41,7 +44,12 @@ function getDefaultGlobalConfig()
 	$gconfig['EXPORT_EXCEL'] = TRUE;
 
 	$gconfig['TEXT_ALERT_SUM_HOURS_OBS'] = 'La suma del total de horas desglosadas es DIFERENTE al total de horas';
-	$gconfig['TEXT_ALERT_MAX_HOURS_OBS'] = "El total de horas exede las " . CONFIG_PARAMS['MAX_HOURS_BY_INTERVAL_ALERT'][0] . " Hs";
+
+	if ($hconfig && key_exists('MAX_HOURS_BY_INTERVAL_ALERT', $hconfig)) {
+
+		$gconfig['TEXT_ALERT_MAX_HOURS_OBS'] = "El total de horas exede las " . $hconfig['MAX_HOURS_BY_INTERVAL_ALERT'][0] . " Hs";
+	}
+
 	$gconfig['TEXT_ALERT_CHANGE_JOURNAL_OBS'] = "El intervalo tiene un cambio de jornada entre ingreso y egreso";
 
 	return $gconfig;
