@@ -16,3 +16,4 @@ function getConfigFile($cfg_file = NULL)
 
 	return $parse_conf;
 }
+

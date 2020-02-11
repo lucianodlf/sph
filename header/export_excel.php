@@ -24,6 +24,11 @@ function validateFileExport($export_file = NULL)
 
 	if ($export_file === NULL) {
 
+		if (strrpos($GLOBALS['CONFIG']['OUTPUT_DIR_PATH'], '/') !== strlen($GLOBALS['CONFIG']['OUTPUT_DIR_PATH']) - 1) {
+			$GLOBALS['CONFIG']['OUTPUT_DIR_PATH'] = $GLOBALS['CONFIG']['OUTPUT_DIR_PATH'] . '/';
+		}
+
+
 		createDirectory($GLOBALS['CONFIG']['OUTPUT_DIR_PATH'] . DATE_EXECUTION);
 
 		$name_file_export = $GLOBALS['CONFIG']['OUTPUT_DIR_PATH'] . DATE_EXECUTION . '/' . date('Ymdhis') . '_' . 'export.xlsx';
@@ -64,10 +69,10 @@ function exportExcel($hours_data, $export_file)
 
 
 	/**
-	*
-	* ========================== Prepare value title for export ================================
-	* 
-	*/
+	 *
+	 * ========================== Prepare value title for export ================================
+	 * 
+	 */
 
 	$titles = [
 		'A' => 'CU',
@@ -118,15 +123,15 @@ function exportExcel($hours_data, $export_file)
 		// Set columns autozise for title
 		$spreadsheet->getActiveSheet()->getColumnDimension("{$column}")->setAutoSize(TRUE);
 
-		if($column === 'K'){
+		if ($column === 'K') {
 			$spreadsheet->getActiveSheet()->getComment("{$column}{$row_title}")->getText()->createTextRun('Indica si es FERIADO el dia de INGRESO');
 		}
 
-		if($column === 'L'){
+		if ($column === 'L') {
 			$spreadsheet->getActiveSheet()->getComment("{$column}{$row_title}")->getText()->createTextRun('Indica si es FERIADO el dia de EGRESO');
 		}
 
-		if($column === 'P'){
+		if ($column === 'P') {
 			$spreadsheet->getActiveSheet()->getComment("{$column}{$row_title}")->getText()->createTextRun('Indica si fue necesario corregir la fecha de ingreso');
 		}
 
@@ -203,7 +208,7 @@ function exportExcel($hours_data, $export_file)
 				'M' => (returnStatusAlert($interval)) ? "SI" : "",
 				'N' => (string) convertMinutosToHoursAndMinutes($interval['RESULT']['total']),
 				'O' => (string) returnObservationAlert($interval),
-				'P' => ($interval['input']['is_date_fixed']) ? "SI" : "", 
+				'P' => ($interval['input']['is_date_fixed']) ? "SI" : "",
 			];
 		}
 	}
@@ -240,4 +245,3 @@ function exportExcel($hours_data, $export_file)
 
 	$write->save($export_file);
 }
-

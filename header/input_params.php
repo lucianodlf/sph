@@ -67,16 +67,30 @@ $input_params = Docopt::handle($doc, $aditional_params);
 
 $args = $input_params->args;
 
+//var_dump($args); die();
+
 // Get Config Params
 $hconfig = getDefaultConfigParams();
 
 // Get Config Default
 $gconfig = getDefaultGlobalConfig($hconfig);
 
-// Get ini config
-$parse_config = getConfigFile(CONFIG_PATH . 'sph.ini');
+$cfg_file = CONFIG_PATH . 'sph.ini';
 
-var_dump($parse_config);
+// For specify INPUT FILE
+if ($args['-f'] && !is_null($args['FILE'])) {
+	$cfg_file = trim($args['FILE']);
+
+} elseif(!is_null($args['--cfg'])) {
+	$cfg_file = trim($args['--cfg']);
+}
+
+// Get ini config
+$parse_config = getConfigFile($cfg_file);
+
+//TODO: revisar configuracion con importacion de archivo
+
+//var_dump($parse_config);
 
 /**
  * ==============================================================================
@@ -174,39 +188,86 @@ if (is_array($parse_config)) {
 	if (key_exists('hparams', $parse_config)) {
 
 		if (key_exists('hdia', $parse_config['hparams'])) {
-			$hconfig['HDIA'] = explode(',', $parse_config['hparams']['hdia']);
+			$value = explode(',', $parse_config['hparams']['hdia']);
+			$value[0] = trim($value[0]);
+			$value[1] = (int) trim($value[1]);
+			$hconfig['HDIA'] = $value;
 		}
 
 		if (key_exists('hdiurnas', $parse_config['hparams'])) {
-			$hconfig['HDIURNAS'] = explode(',', $parse_config['hparams']['hdiurnas']);
+
+			$value = explode(',', $parse_config['hparams']['hdiurnas']);
+			$value[0] = trim($value[0]);
+			$value[1] = (int) trim($value[1]);
+			$hconfig['HDIURNAS'] = $value;
 		}
 
 		if (key_exists('hdiurnas_ext', $parse_config['hparams'])) {
-			//TODO: continuar desde aqui....
+
+			$value = explode(',', $parse_config['hparams']['hdiurnas_ext']);
+			$value[0] = trim($value[0]);
+			$value[1] = (int) trim($value[1]);
+			$hconfig['HDIURNAS_EXT'] = $value;
 		}
 
 		if (key_exists('hnocturnas', $parse_config['hparams'])) {
+
+			$value = explode(',', $parse_config['hparams']['hnocturnas']);
+			$value[0] = trim($value[0]);
+			$value[1] = (int) trim($value[1]);
+			$hconfig['HNOCTURNAS'] = $value;
 		}
 
 		if (key_exists('hnocturnas_ext', $parse_config['hparams'])) {
+
+			$value = explode(',', $parse_config['hparams']['hnocturnas_ext']);
+			$value[0] = trim($value[0]);
+			$value[1] = (int) trim($value[1]);
+			$hconfig['HNOCTURNAS_EXT'] = $value;
 		}
 
 		if (key_exists('h100', $parse_config['hparams'])) {
+
+			$value = explode(',', $parse_config['hparams']['h100']);
+			$value[0] = trim($value[0]);
+			$value[1] = (int) trim($value[1]);
+			$hconfig['HS100'] = $value;
 		}
 
 		if (key_exists('jlnormal_d', $parse_config['hparams'])) {
+
+			$value = explode(',', $parse_config['hparams']['jlnormal_d']);
+
+			foreach ($value as $i => $v) {
+				$value[$i] = (int) trim($v);
+			}
+
+			$hconfig['JLNORMAL_D'] = $value;
 		}
 
 		if (key_exists('jlnormal_hs', $parse_config['hparams'])) {
+			$hconfig['JLNORMAL_HS'] = [(int) $parse_config['hparams']['jlnormal_hs']];
 		}
 
 		if (key_exists('jldif_d', $parse_config['hparams'])) {
+
+			$value = explode(',', $parse_config['hparams']['jldif_d']);
+
+			foreach ($value as $i => $v) {
+				$value[$i] = (int) trim($v);
+			}
+
+			$hconfig['JLDIF_D'] = $value;
 		}
 
 		if (key_exists('jldif_hs', $parse_config['hparams'])) {
+
+			$hconfig['JLDIF_HS'] = [(int) $parse_config['hparams']['jldif_hs']];
 		}
 
 		if (key_exists('nsabado', $parse_config['hparams'])) {
+
+			$hconfig['NSABADO'][(int) $parse_config['hparams']['nsabado']];
 		}
 	}
 
@@ -216,15 +277,19 @@ if (is_array($parse_config)) {
 	if (key_exists('alerts', $parse_config)) {
 
 		if (key_exists('max_hours_by_interval', $parse_config['alerts'])) {
+			$hconfig['MAX_HOURS_BY_INTERVAL_ALERT'] = [(int) $parse_config['alerts']['max_hours_by_interval']];
 		}
 
 		if (key_exists('text_alert_sum', $parse_config['alerts'])) {
+			$gconfig['TEXT_ALERT_SUM_HOURS_OBS'] = (string) $parse_config['alerts']['text_alert_sum'];
 		}
 
 		if (key_exists('text_alert_max', $parse_config['alerts'])) {
+			$gconfig['TEXT_ALERT_MAX_HOURS_OBS'] = (string) $parse_config['alerts']['text_alert_max'];
 		}
 
 		if (key_exists('text_alert_change_journal', $parse_config['alerts'])) {
+			$gconfig['TEXT_ALERT_CHANGE_JOURNAL_OBS'] = (string) $parse_config['alerts']['text_alert_change_journal'];
 		}
 	}
 
@@ -233,13 +298,26 @@ if (is_array($parse_config)) {
 	// ======================= Section [feriados] ==============================
 	if (key_exists('feriados', $parse_config)) {
 
-		//TODO: tratamiento diferente.
+		if (is_array($parse_config['feriados']) && count($parse_config['feriados']) > 0) {
+			$hconfig['FERIADOS'] = [];
+
+			foreach ($parse_config['feriados'] as $year) {
+				$feriados = explode(',', $year);
+
+				if ($feriados && count($feriados) > 0) {
+
+					foreach ($feriados as $i => $f) {
+
+						$hconfig['FERIADOS'][] = trim($f);
+					}
+				}
+			}
+		}
 	}
 }
 
-
-
-die();
+// var_dump($gconfig);
+// var_dump($hconfig);
 
 define('CONFIG_PARAMS', $hconfig);
 
@@ -380,7 +458,7 @@ if ($args['-d'] || $args['--debug-mode']) {
 
 
 
-if ($args['--verbose'] || $args['-v']) {
+if ($args['--verbose'] || $args['-v'] || $gconfig['VERBOSE']) {
 
 	$gconfig['VERBOSE'] = TRUE;
 
