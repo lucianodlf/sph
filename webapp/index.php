@@ -168,7 +168,6 @@
                             $("#taProccessResult").html(data.msg);
                             $("#proccessResult").fadeIn();
 
-
                         }
 
                         $("#loadingGif").hide();
