@@ -3,6 +3,11 @@ $valid_extensions = ['xlsx'];
 
 $path_save_file = '../import/';
 
+$response = [
+    'status' => 0,
+    'msg' => 'No se cargo ningun archivo'
+];
+
 if ($_FILES['file']['error'] === 0) {
     // echo json_encode($_FILES['file']);
 
@@ -17,16 +22,32 @@ if ($_FILES['file']['error'] === 0) {
 
         if (move_uploaded_file($tmp_path, $new_path)) {
 
-            echo true;
+            //TODO: Verificar funcioamiento en plataforma windows
+            $output = shell_exec('cd .. && php sph.php');
+
+            $response = [
+                'status' => 1,
+                'msg' => $output
+            ];
 
         } else {
-            echo false;
+
+            $response = [
+                'status' => 2,
+                'msg' => 'Error: ocurrio un error al mover el archivo (move_uploaded_file...)'
+            ];
         }
+
+    }else{
+        
+        $response = [
+            'status' => 3,
+            'msg' => 'Extencion de archivo invalida (solo se permiten archivos .xlsx)'
+        ];
+
     }
 
-    echo $new_path;
-    exit();
 }
 
-echo -1;
+echo json_encode($response);
 exit();

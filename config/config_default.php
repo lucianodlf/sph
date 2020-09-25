@@ -23,6 +23,7 @@ define('DATE_EXECUTION', date('Ymd'));
 function getDefaultGlobalConfig($hconfig = NULL)
 {
 
+	$gconfig['APP_BASE_PATH'] = APP_BASE_PATH;
 	$gconfig['INPUT_DIR_PATH'] = APP_BASE_PATH . 'import/';
 	$gconfig['INPUT_FILE'] = NULL;
 	$gconfig['OUTPUT_DIR_PATH'] = APP_BASE_PATH . 'export/';

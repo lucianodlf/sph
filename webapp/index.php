@@ -71,7 +71,9 @@
         </header>
 
         <div class="w3-row-padding w3-margin-bottom">
-            <div id="msgResponse" style="display: none;">aca respuesta</div>
+            <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none;"></div>
+            <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none;"></div>
+
             <form action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data">
                 <input type="file" id="file" name="file" accept="xlsx"><br>
                 <input class="w3-btn w3-black" type="submit" value="Cargar planilla">
@@ -304,7 +306,10 @@
 
             $("#formUploadFile").on('submit', (function(e) {
                 e.preventDefault();
+                
                 console.debug("submit file");
+
+                $("#msgResponseError").html("").fadeOut();
 
                 $.ajax({
                     url: "fileUpload.php",
@@ -315,28 +320,39 @@
                     processData: false,
                     beforeSend: function() {
                         console.debug("before send action");
-                        $("#msgResponse").fadeOut();
+                        $("#msgResponseError").fadeOut();
                     },
                     success: function(data) {
                         console.debug(data);
 
-                        if (data == -1) {
-                            console.debug("No se cargo ningun archivo");
-                            $("#msgResponse").html("No se cargo ningun archivo").fadeIn();
+                        data = JSON.parse(data);
 
-                        } else if (data == 0) {
-                            console.debug("Error: al mover archivo");
-                            $("#msgResponse").html("Ocurrio un error al mover el archivo (E#001)").fadeIn();
+                        if (data.status == 0) {
 
-                        } else {
+                            console.debug(data.msg);
+                            $("#msgResponseError").html(data.msg).fadeIn();
+
+                        } else if (data.status == 2) {
+
+                            console.debug("Error: ocurrio un error al mover el archivo (move_uploaded_file...)");
+                            $("#msgResponseError").html(data.msg).fadeIn();
+
+                        } else if (data.status == 3) {
+
+                            console.debug("Extencion de archivo invalida");
+                            $("#msgResponseError").html(data.msg).fadeIn();
+                            $("#formUploadFile")[0].reset();
+
+                        } else { //data.status == 1
+
                             console.debug('Archivo cargado');
-                            $("#msgResponse").html("Archivo cargado").fadeIn();
+                            $("#msgResponseSuccess").html("Archivo cargado").fadeIn();
                             $("#formUploadFile")[0].reset();
 
                         }
                     },
                     error: function(data) {
-                        $("msgResponse").html(e).fadeIn();
+                        $("msgResponseError").html(e).fadeIn();
                     }
                 });
 

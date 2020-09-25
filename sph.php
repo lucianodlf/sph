@@ -31,7 +31,6 @@ logeo('Sort default: ' . $GLOBALS['CONFIG']['SORT_ORDER_INPUT_FILE']);
 logeo('File read: ' . $GLOBALS['CONFIG']['INPUT_FILE']);
 logeo('=========================================================================================');
 
-
 //TODO: Quitame!
 //var_dump($hours_data); die();
 
