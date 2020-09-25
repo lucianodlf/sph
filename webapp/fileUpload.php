@@ -27,7 +27,7 @@ if ($_FILES['file']['error'] === 0) {
 
             $response = [
                 'status' => 1,
-                'msg' => $output
+                'msg' => utf8_encode($output)
             ];
 
         } else {
