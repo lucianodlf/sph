@@ -90,6 +90,7 @@
                     <label>Resultado:</label>
                     <textarea class="w3-input w3-border w3-round-large" id="taProccessResult" name="taProccessResult" rows="10" cols="100" readonly="readonly"></textarea>
                 </div>
+                
             </form>
 
         </div>
@@ -166,6 +167,7 @@
 
                             $("#taProccessResult").html(data.msg);
                             $("#proccessResult").fadeIn();
+
 
                         }
 

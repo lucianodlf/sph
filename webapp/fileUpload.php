@@ -23,7 +23,7 @@ if ($_FILES['file']['error'] === 0) {
         if (move_uploaded_file($tmp_path, $new_path)) {
 
             //TODO: Verificar funcioamiento en plataforma windows
-            $output = shell_exec('cd .. && php sph.php');
+            $output = shell_exec('cd .. && php sph.php --apiweb');
 
             $response = [
                 'status' => 1,

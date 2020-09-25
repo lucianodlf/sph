@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 function export($hours_data, $export_file = NULL)
 {
+
 	$export_file = validateFileExport($export_file);
 
 	if (!is_array($hours_data)) {
@@ -45,6 +46,7 @@ function validateFileExport($export_file = NULL)
 
 function exportExcel($hours_data, $export_file)
 {
+
 	/** Create a new Spreadsheet Object **/
 	$spreadsheet = new Spreadsheet();
 
@@ -244,4 +246,11 @@ function exportExcel($hours_data, $export_file)
 	$write = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
 	$write->save($export_file);
+
+
+	if ($GLOBALS['CONFIG']['APIWEB']) {
+
+		echo realpath($export_file);
+
+	}
 }

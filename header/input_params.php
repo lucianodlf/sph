@@ -15,6 +15,7 @@ Usage:
 	[--date-format-read=FORMAT] [--date-format-show=FORMAT]
 	[--range-read=RANGE] [--sort-order=ORDER] [--verbose]
 	sph.php --version
+	sph.php --apiweb [--i-file=FILE | --i-dir-path=DIR] [--o-file=FILE | --o-dir-path=DIR] 
 
 Example: 
 	php sph.php --i-file=./import/planilla_horas_base_2.xlsx
@@ -28,6 +29,7 @@ Options:
 -d --debug-mode			Enable mode debug
 -x --not-export-excel		Disable export result to excel file (xlsx) [default: TRUE]
 -f FILE --cfg=FILE		specify read configu file (DISABLE)
+--apiweb	Enable mode web
 --version
 
 
@@ -80,8 +82,7 @@ $cfg_file = CONFIG_PATH . 'sph.ini';
 // For specify INPUT FILE
 if ($args['-f'] && !is_null($args['FILE'])) {
 	$cfg_file = trim($args['FILE']);
-
-} elseif(!is_null($args['--cfg'])) {
+} elseif (!is_null($args['--cfg'])) {
 	$cfg_file = trim($args['--cfg']);
 }
 
@@ -128,6 +129,10 @@ if (is_array($parse_config)) {
 
 		if (key_exists('sort_order_input_file', $parse_config['main'])) {
 			$gconfig['SORT_ORDER_INPUT_FILE'] = $parse_config['main']['sort_order_input_file'];
+		}
+
+		if (key_exists('apiweb', $parse_config['main'])) {
+			$gconfig['APIWEB'] = $parse_config['main']['apiweb'];
 		}
 	}
 
@@ -478,6 +483,13 @@ if ($args['--verbose'] || $args['-v'] || $gconfig['VERBOSE']) {
 if ($args['--quiet'] || $args['-q']) {
 
 	$gconfig['QUIET'] = TRUE;
+}
+
+if ($args['--apiweb'] || $gconfig['APIWEB']) {
+	$gconfig['APIWEB'] = TRUE;
+	$gconfig['QUIET'] = TRUE;
+	$gconfig['VERBOSE'] = FALSE;
+	$gconfig['EXPORT_EXCEL'] = TRUE;
 }
 
 

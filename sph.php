@@ -121,7 +121,7 @@ foreach ($hours_data as $user_id => $user) {
 		// ======================= Debug - imprimos parametros de control =============================================/
 
 		debugCurrentParams($current_params);
-		
+
 		// =============================================================================================================/
 
 		logeo(PHP_EOL, FALSE, FALSE, TRUE);
@@ -288,6 +288,14 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 	logeo("Export result file: {$GLOBALS['CONFIG']['OUTPUT_FILE']}", FALSE, TRUE);
 }
 
+// if ($GLOBALS['CONFIG']['APIWEB']) {
+
+// 	// Export data to file
+// 	$return = export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
+
+// 	var_dump($return);
+// }
+
 logeo("End script ;)", FALSE, TRUE);
 
 /************************************************ FUNCTIONS ***********************************************/
@@ -401,7 +409,6 @@ function validateTypeJournal($day_of_week = NULL)
 	}
 
 	return $hours_of_journal;
-	
 }
 
 
@@ -412,7 +419,8 @@ function validateTypeJournal($day_of_week = NULL)
  * 
  * Retorna TRUE (horas normales) o FLASE (horas extras)
  */
-function validateExeedHoursOfJournal($total_minutes = 0, $hours_of_journal = 0){
+function validateExeedHoursOfJournal($total_minutes = 0, $hours_of_journal = 0)
+{
 
 	// Verificamos si cubrimos las horas de la jornada
 	if ($total_minutes > ($hours_of_journal * 60)) {
