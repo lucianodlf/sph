@@ -9,30 +9,28 @@ require HEADER_PATH . 'header_default.php';
 // Default timezone
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
+deleteOldLogFile();
+
 logeo("Start script", FALSE, TRUE);
 
 // Import and prepare data to process
 $hours_data = import($GLOBALS['CONFIG']['INPUT_FILE']);
 
-//logeo("Import file: {$GLOBALS['CONFIG']['INPUT_FILE']}", FALSE, TRUE);
 
 logeo("Process ...", FALSE, TRUE);
 
 logeo(PHP_EOL, FALSE, FALSE, TRUE);
 
 // Initial log
-logeo('=========================================================================================');
-logeo('Default timezone: ' . date_default_timezone_get());
-logeo('Fomat datetime read: ' . $GLOBALS['CONFIG']['DATE_FORMAT_READ']);
-logeo('Format datetime show: ' . $GLOBALS['CONFIG']['DATE_FORMAT_SHOW']);
-logeo('Range read in excel: ' . $GLOBALS['CONFIG']['RANGE_READ_INPUT_FILE']);
-logeo('Sort default: ' . $GLOBALS['CONFIG']['SORT_ORDER_INPUT_FILE']);
+logeo('=========================================================================================', FALSE, TRUE);
+logeo('Default timezone: ' . date_default_timezone_get(), FALSE, TRUE);
+logeo('Fomat datetime read: ' . $GLOBALS['CONFIG']['DATE_FORMAT_READ'], FALSE, TRUE);
+logeo('Format datetime show: ' . $GLOBALS['CONFIG']['DATE_FORMAT_SHOW'], FALSE, TRUE);
+logeo('Range read in excel: ' . $GLOBALS['CONFIG']['RANGE_READ_INPUT_FILE'], FALSE, TRUE);
+logeo('Sort default: ' . $GLOBALS['CONFIG']['SORT_ORDER_INPUT_FILE'], FALSE, TRUE);
 //logeo('Confir params: ' . json_encode($config_params));
-logeo('File read: ' . $GLOBALS['CONFIG']['INPUT_FILE']);
-logeo('=========================================================================================');
-
-//TODO: Quitame!
-//var_dump($hours_data); die();
+logeo('File read: ' . $GLOBALS['CONFIG']['INPUT_FILE'], FALSE, TRUE);
+logeo('=========================================================================================', FALSE, TRUE);
 
 logeo(PHP_EOL, FALSE, FALSE, TRUE);
 

@@ -87,7 +87,7 @@
                 <hr>
 
                 <div id="proccessResult" style="display: none;">
-                    <label>Resultado:</label>
+                    <label>Archivo exportado:</label>
                     <textarea class="w3-input w3-border w3-round-large" id="taProccessResult" name="taProccessResult" rows="10" cols="100" readonly="readonly"></textarea>
                 </div>
 

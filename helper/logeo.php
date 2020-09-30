@@ -32,6 +32,13 @@ function logeo($text = "", $hidde = FALSE, $force = FALSE, $nodate = FALSE)
 }
 
 
+function deleteOldLogFile(){
+	if(file_exists(dirname(__FILE__,2) . '/logs/sphl.log')){
+		unlink(dirname(__FILE__,2) . '/logs/sphl.log');
+	}
+}
+
+
 // Show resumen calculte by interval
 function debugShowRersumen($hours_interval_result)
 {
