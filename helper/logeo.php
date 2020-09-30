@@ -3,6 +3,7 @@
 // Logueo
 function logeo($text = "", $hidde = FALSE, $force = FALSE, $nodate = FALSE)
 {
+
 	if (!$GLOBALS['CONFIG']['QUIET']) {
 
 		if (($GLOBALS['CONFIG']['VERBOSE'] && !$hidde) || $force) {
@@ -12,6 +13,19 @@ function logeo($text = "", $hidde = FALSE, $force = FALSE, $nodate = FALSE)
 			} else {
 
 				echo date('Y-m-d h:i:s') . ": " . $text . PHP_EOL;
+			}
+		}
+	}
+
+	if ($GLOBALS['CONFIG']['APIWEB']) {
+
+		if (($GLOBALS['CONFIG']['VERBOSE'] && !$hidde) || $force) {
+			if ($nodate) {
+
+				file_put_contents(dirname(__FILE__, 2) . '/logs/sphl.log', $text . PHP_EOL, FILE_APPEND);
+			} else {
+
+				file_put_contents(dirname(__FILE__, 2) . '/logs/sphl.log', date('Y-m-d h:i:s') . ": " . $text . PHP_EOL, FILE_APPEND);
 			}
 		}
 	}

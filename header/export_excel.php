@@ -17,6 +17,8 @@ function export($hours_data, $export_file = NULL)
 	}
 
 	exportExcel($hours_data, $export_file);
+
+	return $export_file;
 }
 
 
@@ -247,11 +249,4 @@ function exportExcel($hours_data, $export_file)
 
 	$write->save($export_file);
 
-	// Si se utiliza el flag apiweb solo se retorna por la salida estandar
-	// el pathabsoluto del arhcivo exportado
-	if ($GLOBALS['CONFIG']['APIWEB']) {
-
-		echo realpath($export_file);
-
-	}
 }

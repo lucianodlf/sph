@@ -29,7 +29,7 @@
 
     <!-- Top container -->
     <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> Menu</button>
+        <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i> Menu</button> -->
         <span class="w3-bar-item w3-right">SPH - Premoldeados Bertone</span>
     </div>
 
@@ -82,7 +82,7 @@
 
             <form action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
                 <input class="w3-input w3-border w3-round-large" type="file" id="file" name="file" accept="xlsx"><br>
-                <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Cargar planilla">
+                <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Cargar">
                 <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
                 <hr>
 
@@ -90,7 +90,7 @@
                     <label>Resultado:</label>
                     <textarea class="w3-input w3-border w3-round-large" id="taProccessResult" name="taProccessResult" rows="10" cols="100" readonly="readonly"></textarea>
                 </div>
-                
+
             </form>
 
         </div>
@@ -120,6 +120,7 @@
                 console.debug("submit file");
 
                 $("#msgResponseError").html("").hide();
+                $("msgResponseSuccess").html("").hide();
                 $("#taProccessResult").html("");
                 $("#proccessResult").hide();
                 $("#progressBar").hide();
@@ -138,7 +139,7 @@
                         $("#loadingGif").show();
 
                     },
-                    success: function(data) {
+                    success: function(data) { //TODO: simplificar condicionales para mensajes
                         console.debug(data);
 
                         data = JSON.parse(data);
@@ -156,6 +157,12 @@
                         } else if (data.status == 3) {
 
                             console.debug("Extencion de archivo invalida");
+                            $("#msgResponseError").html(data.msg).fadeIn();
+                            $("#formUploadFile")[0].reset();
+
+                        } else if (data.status == 4) {
+
+                            console.debug("Error en ejecucion de sph.php. Revisar log");
                             $("#msgResponseError").html(data.msg).fadeIn();
                             $("#formUploadFile")[0].reset();
 
@@ -184,13 +191,13 @@
 
         // --------------------------------------------------------------------
         // Get the Sidebar
-        var mySidebar = document.getElementById("mySidebar");
+        // var mySidebar = document.getElementById("mySidebar");
 
         // Get the DIV with overlay effect
-        var overlayBg = document.getElementById("myOverlay");
+        // var overlayBg = document.getElementById("myOverlay");
 
         // Toggle between showing and hiding the sidebar, and add overlay effect
-        function w3_open() {
+        /* function w3_open() {
             if (mySidebar.style.display === 'block') {
                 mySidebar.style.display = 'none';
                 overlayBg.style.display = "none";
@@ -198,13 +205,13 @@
                 mySidebar.style.display = 'block';
                 overlayBg.style.display = "block";
             }
-        }
+        } */
 
         // Close the sidebar with the close button
-        function w3_close() {
+        /* function w3_close() {
             mySidebar.style.display = "none";
             overlayBg.style.display = "none";
-        }
+        } */
     </script>
 
 </body>

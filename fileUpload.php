@@ -1,7 +1,7 @@
 <?php
 $valid_extensions = ['xlsx'];
 
-$path_save_file = '../import/';
+$path_save_file = 'import/';
 
 $response = [
     'status' => 0,
@@ -23,12 +23,24 @@ if ($_FILES['file']['error'] === 0) {
         if (move_uploaded_file($tmp_path, $new_path)) {
 
             //TODO: Verificar funcioamiento en plataforma windows
-            $output = shell_exec('cd .. && php sph.php --apiweb');
+            $output = shell_exec('php sph.php --apiweb');
 
-            $response = [
-                'status' => 1,
-                'msg' => utf8_encode($output)
-            ];
+            $decoded_output = (array) json_decode($output);
+
+            if($decoded_output['status'] == 1){
+                
+                $response = [
+                    'status' => 1,
+                    'msg' => $decoded_output['path']
+                ];
+
+            }else{
+
+                $response = [
+                    'status' => 4,
+                    'msg' => 'Error en ejecucion de sph.php. Revisar log'
+                ];
+            }
 
         } else {
 

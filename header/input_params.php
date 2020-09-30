@@ -488,7 +488,7 @@ if ($args['--quiet'] || $args['-q']) {
 if ($args['--apiweb'] || $gconfig['APIWEB']) {
 	$gconfig['APIWEB'] = TRUE;
 	$gconfig['QUIET'] = TRUE;
-	$gconfig['VERBOSE'] = FALSE;
+	//$gconfig['VERBOSE'] = TRUE;
 	$gconfig['EXPORT_EXCEL'] = TRUE;
 }
 

@@ -279,22 +279,35 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 
 	logeo(PHP_EOL, FALSE, TRUE, TRUE);
 
-	//TODO: quitame
-	//var_dump($GLOBALS['CONFIG']);
+	if ($GLOBALS['CONFIG']['APIWEB']) {
 
-	// Export data to file
-	export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
+		logeo('Export mode (APPIWEB)', FALSE, TRUE);
 
-	logeo("Export result file: {$GLOBALS['CONFIG']['OUTPUT_FILE']}", FALSE, TRUE);
+		// Export data to file
+		$output = export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
+
+		$data_return = [
+			'status' => 0,
+			'path' => ''
+		];
+
+		if (file_exists($output)) {
+			$data_return['path'] = realpath($output);
+			$data_return['status'] = 1;
+		}
+
+		$json_data = json_encode($data_return);
+		logeo("Export data: " . $json_data);
+		echo $json_data;
+	} else {
+
+		// Export data to file
+		export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
+
+		logeo("Export result file: {$GLOBALS['CONFIG']['OUTPUT_FILE']}", FALSE, TRUE);
+	}
 }
 
-// if ($GLOBALS['CONFIG']['APIWEB']) {
-
-// 	// Export data to file
-// 	$return = export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
-
-// 	var_dump($return);
-// }
 
 logeo("End script ;)", FALSE, TRUE);
 
