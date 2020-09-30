@@ -77,8 +77,8 @@
         </header>
 
         <div class="w3-row-padding w3-margin-bottom">
-            <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none;"></div>
-            <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none;"></div>
+            <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px;"></div>
+            <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px;"></div>
 
             <form action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
                 <input class="w3-input w3-border w3-round-large" type="file" id="file" name="file" accept="xlsx"><br>
