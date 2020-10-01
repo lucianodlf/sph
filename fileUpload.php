@@ -22,26 +22,33 @@ if ($_FILES['file']['error'] === 0) {
 
         if (move_uploaded_file($tmp_path, $new_path)) {
 
-            //TODO: Verificar funcioamiento en plataforma windows
-            $output = shell_exec('php sph.php --apiweb');
+            if (strtoupper(substr(PHP_OS, null, 3)) === 'WIN') {
+
+                //	var_dump(dirname($_SERVER['DOCUMENT_ROOT']) . '\php\php.exe');	
+                $output = shell_exec(dirname($_SERVER['DOCUMENT_ROOT']) . "\php\php.exe sph.php --apiweb");
+            } else {
+
+                // Asumimos que es linux
+                // Por ahora realizado para poder desarrollar en entorno linux y desplegar en windows.
+                $output = shell_exec("php sph.php --apiweb");
+            }
+
 
             $decoded_output = (array) json_decode($output);
 
-            if($decoded_output['status'] == 1){
-                
+            if ($decoded_output['status'] == 1) {
+
                 $response = [
                     'status' => 1,
                     'msg' => $decoded_output['path']
                 ];
-
-            }else{
+            } else {
 
                 $response = [
                     'status' => 4,
                     'msg' => 'Error en ejecucion de sph.php. Revisar log'
                 ];
             }
-
         } else {
 
             $response = [
@@ -49,16 +56,13 @@ if ($_FILES['file']['error'] === 0) {
                 'msg' => 'Error: ocurrio un error al mover el archivo (move_uploaded_file...)'
             ];
         }
+    } else {
 
-    }else{
-        
         $response = [
             'status' => 3,
             'msg' => 'Extencion de archivo invalida (solo se permiten archivos .xlsx)'
         ];
-
     }
-
 }
 
 echo json_encode($response);
