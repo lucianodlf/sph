@@ -295,9 +295,15 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 		}
 
 		$json_data = json_encode($data_return);
-		logeo("Export data: " . $json_data);
+
+		logeo("Export data: " . $json_data, FALSE, TRUE);
+		
+		// Salida en json que es tomada por el script que invoca desde el webserver
+		// a sph.php
 		echo $json_data;
 	} else {
+
+		logeo('Export mode (terminal - xlsx)', FALSE, TRUE);
 
 		// Export data to file
 		export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
