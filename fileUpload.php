@@ -40,8 +40,10 @@ if ($_FILES['file']['error'] === 0) {
 
                 $response = [
                     'status' => 1,
-                    'msg' => $decoded_output['path']
+                    'localpath' => $decoded_output['localpath'],
+                    'serverpath' => $_SERVER['HTTP_REFERER'] . $decoded_output['serverpath']
                 ];
+
             } else {
 
                 $response = [

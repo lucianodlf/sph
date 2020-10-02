@@ -79,9 +79,9 @@
                 <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
                 <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
                 <hr>
-
+                
                 <div id="proccessResult" style="display: none;">
-                    <label>Archivo exportado:</label>
+                    <label>Archivo exportado:</label>    
                     <textarea class="w3-input w3-border w3-round-large" id="taProccessResult" name="taProccessResult" rows="10" cols="100" readonly="readonly"></textarea>
                 </div>
 
@@ -166,7 +166,9 @@
                             $("#msgResponseSuccess").html("Archivo procesado!").fadeIn();
                             $("#formUploadFile")[0].reset();
 
-                            $("#taProccessResult").html(data.msg);
+                            window.location.href = data.serverpath;
+                            
+                            $("#taProccessResult").html(data.localpath);
                             $("#proccessResult").fadeIn();
 
                         }

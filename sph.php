@@ -286,11 +286,13 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 
 		$data_return = [
 			'status' => 0,
-			'path' => ''
+			'serverpath' => '',
+			'localpath' => ''
 		];
 
 		if (file_exists($output)) {
-			$data_return['path'] = realpath($output);
+			$data_return['localpath'] = realpath($output);
+			$data_return['serverpath'] = $output;
 			$data_return['status'] = 1;
 		}
 
