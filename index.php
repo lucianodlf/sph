@@ -70,11 +70,11 @@
         </header>
 
         <div class="w3-row-padding w3-margin-bottom">
-            <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px;"></div>
-            <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px;"></div>
+            <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+            <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
 
             <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
-                
+
                 <input class="w3-input w3-border w3-round-large" lang="es" type="file" id="file" name="file" accept="xlsx"><br>
                 <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
                 <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
