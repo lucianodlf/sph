@@ -52,8 +52,8 @@
         </div>
         <div class="w3-bar-block">
             <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i> Cerrar Menu</a>
-            <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-tasks fa-fw"></i> Procesamiento</a>
-            <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i> Configuracion</a>
+            <a href="#" id="menuItemProcess" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-tasks fa-fw"></i> Procesamiento</a>
+            <a href="#" id="menuItemConfig" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i> Configuracion</a>
         </div>
     </nav>
 
@@ -64,32 +64,51 @@
     <!-- !PAGE CONTENT! -->
     <div class="w3-main" style="margin-left:200px;margin-top:43px;">
 
-        <!-- Header -->
-        <header class="w3-container" style="padding-top:22px">
-            <h5 style="margin-left:30px;"><b><i class="fa fa-tasks"></i> Procesamiento de horas</b></h5>
-        </header>
+        <section id="processFile">
+            <!-- Header -->
+            <header class="w3-container" style="padding-top:22px">
+                <h5 style="margin-left:30px;"><b><i class="fa fa-tasks"></i> Procesamiento de horas</b></h5>
+            </header>
 
-        <div class="w3-row-padding w3-margin-bottom">
-            <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
-            <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+            <div class="w3-row-padding w3-margin-bottom">
+                <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+                <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
 
-            <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
+                <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
 
-                <input class="w3-input w3-border w3-round-large" lang="es" type="file" id="file" name="file" accept="xlsx"><br>
-                <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
-                <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
-                <hr>
-                
-                <div id="proccessResult" style="display: none;">
-                    <label>Archivo exportado:</label>    
-                    <textarea class="w3-input w3-border w3-round-large" id="taProccessResult" name="taProccessResult" rows="10" cols="100" readonly="readonly"></textarea>
-                </div>
+                    <input class="w3-input w3-border w3-round-large" lang="es" type="file" id="file" name="file" accept="xlsx"><br>
+                    <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
+                    <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
+                    <hr>
 
-            </form>
+                    <div id="proccessResult" style="display: none;">
+                        <label>Archivo exportado:</label>
+                        <textarea class="w3-input w3-border w3-round-large" id="taProccessResult" name="taProccessResult" rows="10" cols="100" readonly="readonly"></textarea>
+                    </div>
 
-        </div>
+                </form>
 
-        <hr>
+            </div>
+
+
+        </section>
+
+        <section id="config" style="display: none;">
+            <!-- Header -->
+            <header class="w3-container" style="padding-top:22px">
+                <h5 style="margin-left:30px;"><b><i class="fa fa-tasks"></i> Configuracion</b></h5>
+            </header>
+
+            <div class="w3-row-padding w3-margin-bottom">
+                <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+                <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+
+                <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
+
+                </form>
+
+            </div>
+        </section>
 
         <!-- Footer -->
         <!-- <footer class="w3-container w3-padding-16 w3-light-grey">
@@ -167,7 +186,7 @@
                             $("#formUploadFile")[0].reset();
 
                             window.location.href = data.serverpath;
-                            
+
                             $("#taProccessResult").html(data.localpath);
                             $("#proccessResult").fadeIn();
 
@@ -182,6 +201,25 @@
                 });
 
             }));
+
+
+            $("#menuItemConfig").click(function(){
+                console.debug('menuItemConfig click');
+                $("#processFile").hide();
+                $("#config").show();
+
+                $(this).addClass('w3-blue');
+                $("#menuItemProcess").removeClass('w3-blue');
+            });
+
+            $("#menuItemProcess").click(function(){
+                console.debug('menuItemProcess click');
+                $("#processFile").show();
+                $("#config").hide();
+
+                $(this).addClass('w3-blue');
+                $("#menuItemConfig").removeClass('w3-blue');
+            });
         });
 
 
