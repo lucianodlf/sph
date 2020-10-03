@@ -1,3 +1,4 @@
+config/sph.ini
 import/*.xlsx
 vendor/
 export/*.*

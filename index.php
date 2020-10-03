@@ -100,11 +100,17 @@
             </header>
 
             <div class="w3-row-padding w3-margin-bottom">
-                <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
-                <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+                <div id="msgCfgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
+                <div id="msgCfgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
 
-                <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
+                <form lang="es" action="#" method="POST" id="formSaveConfig" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
+                    <label for="taFeriados">Feriados</label>
+                    <textarea class="w3-input w3border w3-round-large" id="taFeriados" name="taFeriados" rows="5" cols="20" placeholder="Fechas separadas por ,(coma) en formato dd/mm/yyyy: 01/01/2020,24/02/2020,..."></textarea>
+                    <p style="font-size: 8pt; margin-top:2px;" class="w3-text-dark-gray">Fechas separadas por ,(coma) en formato dd/mm/yyyy: 01/01/2020,24/02/2020,...</p>
 
+                    <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Guardar">
+                    <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
+                    <hr>
                 </form>
 
             </div>
@@ -123,9 +129,58 @@
     <script>
         $(document).ready(function(e) {
 
-            $("#proccessResult").hide();
-
             console.debug('ready document');
+
+            $("#formSaveConfig").on('submit', (function(e) {
+                e.preventDefault();
+
+                console.debug('submit save config');
+
+                $("#msgCfgResponseError").html("").hide();
+                $("msgCfgResponseSuccess").html("").hide();
+                $("#taFeriados").html("");
+                $("#loadingGif").hide();
+
+                $.ajax({
+                    url: "saveConfig.php",
+                    type: "POST",
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        console.debug("before send action");
+
+                        $("#loadingGif").show();
+
+                    },
+                    success: function(data) { //TODO: simplificar condicionales para mensajes
+                        console.debug(data);
+
+                        data = JSON.parse(data);
+
+                        if (data.status == 0) {
+
+                            console.debug(data.msg);
+                            $("#msgCfgResponseError").html(data.msg).fadeIn(1000);
+
+                        } else {
+
+                            console.debug('Archivo cargado');
+                            $("#msgCfgResponseSuccess").html(data.msg).fadeIn(1000);
+                            $("#formSaveConfig")[0].reset();
+
+                        }
+
+                        $("#loadingGif").hide();
+                    },
+                    error: function(data) {
+                        $("msgResponseError").html(e).fadeIn();
+                        $("#loadingGif").hide();
+                    }
+                });
+
+            }));
 
             $("#formUploadFile").on('submit', (function(e) {
                 e.preventDefault();
@@ -136,7 +191,6 @@
                 $("msgResponseSuccess").html("").hide();
                 $("#taProccessResult").html("");
                 $("#proccessResult").hide();
-                $("#progressBar").hide();
                 $("#loadingGif").hide();
 
                 $.ajax({
@@ -203,22 +257,29 @@
             }));
 
 
-            $("#menuItemConfig").click(function(){
+            $("#menuItemConfig").click(function() {
                 console.debug('menuItemConfig click');
                 $("#processFile").hide();
                 $("#config").show();
 
                 $(this).addClass('w3-blue');
                 $("#menuItemProcess").removeClass('w3-blue');
+
+                $("#msgCfgResponseError").html("").hide();
+                $("#msgCfgResponseSuccess").html("").hide();
+
             });
 
-            $("#menuItemProcess").click(function(){
+            $("#menuItemProcess").click(function() {
                 console.debug('menuItemProcess click');
                 $("#processFile").show();
                 $("#config").hide();
 
                 $(this).addClass('w3-blue');
                 $("#menuItemConfig").removeClass('w3-blue');
+
+                $("#msgResponseError").html("").hide();
+                $("#msgResponseSuccess").html("").hide();
             });
         });
 
