@@ -74,7 +74,7 @@
                 <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
                 <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
 
-                <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
+                <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-margin">
 
                     <input class="w3-input w3-border w3-round-large" lang="es" type="file" id="file" name="file" accept="xlsx"><br>
                     <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
@@ -96,18 +96,25 @@
         <section id="config" style="display: none;">
             <!-- Header -->
             <header class="w3-container" style="padding-top:22px">
-                <h5 style="margin-left:30px;"><b><i class="fa fa-tasks"></i> Configuracion</b></h5>
+                <h5 style="margin-left:30px;"><b><i class="fa fa-cog"></i> Configuracion</b></h5>
             </header>
 
             <div class="w3-row-padding w3-margin-bottom">
                 <div id="msgCfgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
                 <div id="msgCfgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
 
-                <form lang="es" action="#" method="POST" id="formSaveConfig" enctype="multipart/form-data" class="w3-container w3-light-grey w3-text-blue w3-margin">
+                <form lang="es" action="#" method="POST" id="formSaveConfig" enctype="multipart/form-data" class="w3-container w3-light-grey w3-margin">
                     <label for="taFeriados">Feriados</label>
                     <textarea class="w3-input w3border w3-round-large" id="taFeriados" name="taFeriados" rows="5" cols="20" placeholder="Fechas separadas por ,(coma) en formato dd/mm/yyyy: 01/01/2020,24/02/2020,..."></textarea>
                     <p style="font-size: 8pt; margin-top:2px;" class="w3-text-dark-gray">Fechas separadas por ,(coma) en formato dd/mm/yyyy: 01/01/2020,24/02/2020,...</p>
 
+                    <hr>
+
+                    <label for="taEmployees">Empleados</label>
+                    <textarea class="w3-input w3border w3-round-large" id="taEmployees" name="taEmployees" rows="5" cols="20" placeholder="Códigos de empleados separados por ,(coma): 1,4,109,..."></textarea>
+                    <p style="font-size: 8pt; margin-top:2px;" class="w3-text-dark-gray">Códigos de empleados separados por ,(coma): 1,4,109,...</p>
+
+                    <hr>
                     <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Guardar">
                     <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
                     <hr>
@@ -137,7 +144,7 @@
                 console.debug('submit save config');
 
                 $("#msgCfgResponseError").html("").hide();
-                $("msgCfgResponseSuccess").html("").hide();
+                $("#msgCfgResponseSuccess").html("").hide();
                 $("#taFeriados").html("");
                 $("#loadingGif").hide();
 

@@ -39,4 +39,4 @@ text_alert_max = "El total de horas exede las {%MAX_HOURS_BY_INTERVAL_ALERT} Hs"
 text_alert_change_journal = "El intervalo tiene un cambio de jornada entre 
 ingreso y egreso"
 [feriados]
-2020 = "01/02/2020"
+2020 = "01/01/2020"

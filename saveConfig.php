@@ -4,7 +4,7 @@
 define('CONFIG_PATH', $_SERVER['DOCUMENT_ROOT'] . '/config/');
 
 $response = [
-    'status' => 0,
+    'status' => 1,
     'msg' => ''
 ];
 
@@ -28,22 +28,58 @@ if (!empty($_POST['taFeriados'])) {
     if ($row) {
         $cfg_array['feriados'][$current_year] = $row;
     } else {
-        $response['msg'] = 'Ups! parece que ocurrio un error al procesar las fechas de feriados. Por favor revisa los datos cargados <br> 
+
+        $response['status'] = 0;
+
+        $response['msg'] = '<hr> # Ups! parece que ocurrio un error al procesar las fechas de feriados. Por favor revisa los datos cargados <br> 
         recorda que deben ser fechas validas con el formado dd/mm/yyyy y deben estar separadas por ,(coma) <br>
         <strong>Nota: no debe quedar una coma al final ni al principio.</strong>';
 
-        echo json_encode($response);
-        exit();
+        //echo json_encode($response);
+        //exit();
     }
 }
 
-saveConfigFile($cfg_array);
+if (!empty($_POST['taEmployees'])) {
 
-$response['status'] = 1;
-$response['msg'] = 'Configuracion guardada';
+    if (!key_exists('empleados', $parse_conf)) $parse_conf['empleados'] = [];
+    if (!key_exists($current_year, $parse_conf['empleados'])) $parse_conf['empleados']['empleados'] = '';
+
+    $employees = explode(',', trim($_POST['taEmployees']));
+
+    $row = createRowEmployees($employees);
+
+    if ($row) {
+        $parse_conf['empleados']['empleados'] = $row;
+    } else {
+
+        $response['status'] = 0;
+
+        $response['msg'] .= '<hr> # Ups! parece que ocurrio un error al procesar los empleados. Por favor revisa los datos cargados. <br> 
+        recorda que deben ser numeros unicamente y deben estar separados por ,(coma) <br>
+        <strong>Nota: no debe quedar una coma al final ni al principio.</strong>';
+
+        // echo json_encode($response);
+        // exit();
+    }
+}
+
+
+
+
+if ($response['status'] == 1) {
+    saveConfigFile($cfg_array);
+    $response['msg'] = 'Configuracion guardada';
+}
+
+// $response['status'] = 1;
 
 echo json_encode($response);
 exit();
+
+
+/* ######################################################## */
+
 
 // Escribe un arhcivo de configuracion a partir de un array
 function saveConfigFile($cfg_array)
@@ -85,6 +121,20 @@ function saveConfigFile($cfg_array)
     }
 }
 
+
+function createRowEmployees(array $employees)
+{
+
+    foreach ($employees as $key => $value) {
+        $value = (integer) $value;
+
+        if (boolval($value) === false) {
+            return false;
+        }
+    }
+
+    return implode(",", $employees);
+}
 
 
 function createRowDatesFeriados(array $dates)

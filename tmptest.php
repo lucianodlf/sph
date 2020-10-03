@@ -10,6 +10,8 @@ $parse_conf = parse_ini_file($cfg_file, TRUE, INI_SCANNER_TYPED);
 // Datos de prueba de post, fechas de feriados separadas por coma
 $_POST['taFeriados'] = '14/01/2020, 02/01/2020';
 
+$_POST['taUsers'] = '91,4,109';
+
 
 // Modificamos datos de configuracion segun obtengamos por post
 if (!empty($_POST['taFeriados'])) {
@@ -29,6 +31,22 @@ if (!empty($_POST['taFeriados'])) {
     if($row) $parse_conf['feriados'][$current_year] = $row;
     
 }
+
+
+if (!empty($_POST['taUsers'])) {
+    
+    if (!key_exists('usuarios', $parse_conf)) $parse_conf['usuarios'] = [];
+    if (!key_exists($current_year, $parse_conf['usuarios'])) $parse_conf['usuarios']['usuarios'] = '';
+    
+    $users = explode(',', trim($_POST['taUsers']));
+    var_dump($users);
+
+    $row = createRowUsers($users);
+
+    if($row) $parse_conf['usuarios']['usuarios'] = $row;
+    
+}
+
 
 saveConfigFile($parse_conf);
 
@@ -72,6 +90,18 @@ function saveConfigFile($cfg_array)
     }
 }
 
+
+function createRowUsers(array $users){
+
+    foreach ($users as $key => $value) {
+        
+        if(gettype(intval($value)) != "integer"){
+            return false;
+        }
+    }
+
+    return implode(",", $users);
+}
 
 
 function createRowDatesFeriados(array $dates)
