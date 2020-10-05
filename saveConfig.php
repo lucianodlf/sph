@@ -17,7 +17,7 @@ if (!empty($_POST['taFeriados'])) {
     // Modificar para agregar año seleccionable
     $current_year = date('Y');
 
-    if (!key_exists('feriados', $parse_conf)) $cfg_array['feriados'] = [];
+    if (!key_exists('feriados', $cfg_array)) $cfg_array['feriados'] = [];
 
     if (!key_exists($current_year, $cfg_array['feriados'])) $cfg_array['feriados'][$current_year] = '';
 
@@ -42,15 +42,15 @@ if (!empty($_POST['taFeriados'])) {
 
 if (!empty($_POST['taEmployees'])) {
 
-    if (!key_exists('empleados', $parse_conf)) $parse_conf['empleados'] = [];
-    if (!key_exists($current_year, $parse_conf['empleados'])) $parse_conf['empleados']['empleados'] = '';
+    if (!key_exists('empleados', $cfg_array)) $cfg_array['empleados'] = [];
+    if (!key_exists($current_year, $cfg_array['empleados'])) $cfg_array['empleados']['empleados'] = '';
 
     $employees = explode(',', trim($_POST['taEmployees']));
 
     $row = createRowEmployees($employees);
-
+    
     if ($row) {
-        $parse_conf['empleados']['empleados'] = $row;
+        $cfg_array['empleados']['empleados'] = $row;
     } else {
 
         $response['status'] = 0;
@@ -178,7 +178,7 @@ function getConfigFile($cfg_file = NULL)
         return FALSE;
     }
 
-    $parse_conf = parse_ini_file($cfg_file, TRUE, INI_SCANNER_TYPED);
+    $cfg_array = parse_ini_file($cfg_file, TRUE, INI_SCANNER_TYPED);
 
-    return $parse_conf;
+    return $cfg_array;
 }
