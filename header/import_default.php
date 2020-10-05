@@ -99,6 +99,8 @@ function prepareData($sheet_data)
 	$hours_data = [];
 	$count_row = 0;
 
+	$dates_process = [];
+
 	foreach ($sheet_data as $idx => $row) {
 
 		$str_row = implode("", $row);

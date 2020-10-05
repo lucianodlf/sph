@@ -49,6 +49,11 @@ logeo('=========================================================================
 // Set iterator count users
 $count_iterator = 0;
 
+// Acumula total de tiempo por usuario y fecha
+// $hours_by_date[ user_id ][ date ] = x hs
+$hours_by_date = [];
+
+
 /**
  * 
  * Recorremos todos los usuarios
@@ -166,6 +171,10 @@ foreach ($hours_data as $user_id => $user) {
 			}
 
 
+			// Acumulamos 1 minuto por user_id/fecha
+			$cd = $acum_minutes_datetime->format('d/m/Y');
+			$hours_by_date[$user_id][$cd]++;
+
 			// Add 1 Minute
 			$acum_minutes_datetime->add(new DateInterval('PT1M'));
 
@@ -243,6 +252,10 @@ foreach ($hours_data as $user_id => $user) {
 
 		logeo(PHP_EOL, FALSE, FALSE, TRUE);
 
+		// var_dump($minutes_interval_result['total']);
+		// var_dump($acum_minutes_datetime);
+		// var_dump($hours_by_date);
+		// die();
 
 		// For debug or test, only process max max count intervals by user
 		if ($GLOBALS['CONFIG']['DEBUG_COUNT_MAX_INTERVAL_USER'] > 0 && $count_interbal_by_user >= $GLOBALS['CONFIG']['DEBUG_COUNT_MAX_INTERVAL_USER']) {
@@ -263,7 +276,87 @@ logeo('=========================================================================
 
 logeo();
 
-//var_dump($hours_data);
+
+/***************************************** SUMMARY ABSENCES **********************************/
+
+//FIXME: Force summary abcences
+$GLOBALS['CONFIG']['ABSENCES'] = TRUE;
+
+if ($GLOBALS['CONFIG']['ABSENCES']) {
+
+	logeo('Export summary absences (TRUE)', FALSE, TRUE);
+
+	// Simula limite de fecha para emitir resumen de asistencias.
+	// TODO: Para tener coherencia con la planilla importada los limites podrian
+	// ser calculados en funcion de las fechas minimo y maximo de la planilla.
+	$absences_date_start = DateTime::createFromFormat('d/m/Y', '01/01/2020');
+	$absences_date_end = DateTime::createFromFormat('d/m/Y', '15/01/2020');
+
+	$absences_summary = [];
+	$absences_cd = clone $absences_date_start;
+
+	//TODO: Esto podemos hacerlo antes de crear el array $hours_by_date.
+	// Armar array de fechas sobre las que se aplica el resumen de inasistencias
+	// Luego al sumar las horas en $hours_by_date machear por clave de fecha y cargar el balor para 
+	// no tener que hacerlo duplicado aca.... ni yo me entiendo ;)
+
+	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
+	// inasistencias[ user_id ][ fecha ]: 
+	// 		# (Cantidad horas trabajadas)
+	// 		IT 	(Inasistencia total)
+	//		IP	(Inasistencia parcial)
+	// 		FF 	(Feriado)
+	while ($absences_cd <= $absences_date_end) {
+		// echo $absences_cd->format('d/m/Y') . PHP_EOL;
+
+		// Recorre acumulado de horas por dia para cada usuario
+		foreach ($hours_by_date as $user_id => $date) {
+
+			$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IT';
+
+			// Si existe la clave de fecha, es un dia trabajado por el usuario
+			if (key_exists($absences_cd->format('d/m/Y'), $date)) {
+
+				$total_h = $date[$absences_cd->format('d/m/Y')] / 60;
+
+				// Almacena total de horas trabajadas por el usuario para el dia en curso
+				$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = $total_h;
+
+				// Verificamos si es inasistencia parcial
+				if (validateTypeJournal($absences_cd->format('w'), TRUE) > $total_h) {
+					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IP';
+				}
+			} else {
+				// Si no existe la clave y es feriado, no se cuenta inasistencia, si no es feriado, es inasistencia.
+
+				if (in_array($absences_cd->format('d/m/Y'), CONFIG_PARAMS['FERIADOS'])) {
+					// Es feriado, valor -1
+					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'FF';
+				}
+			}
+		}
+
+		$absences_cd->add(new DateInterval('P1D'));
+	}
+
+	// var_dump($absences_summary);
+}
+
+//FIXME: Temporal para debug
+/* function debugHoursByDate($hours_by_date)
+{
+	if (!$hours_by_date) return NULL;
+	
+	foreach ($hours_by_date as $user_id => $date) {
+		foreach ($date as $d => $minutes) {
+			logeo($user_id . " [ " . $d . " ] = " . $minutes / 60 . " Hs", FALSE,TRUE);
+		}
+	}
+}
+ */
+
+
+
 
 if (!$GLOBALS['CONFIG']['QUIET']) {
 
@@ -272,6 +365,8 @@ if (!$GLOBALS['CONFIG']['QUIET']) {
 	// Export default in screen
 	showResult($hours_data);
 }
+
+
 
 if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 
@@ -299,7 +394,7 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 		$json_data = json_encode($data_return);
 
 		logeo("Export data: " . $json_data, FALSE, TRUE);
-		
+
 		// Salida en json que es tomada por el script que invoca desde el webserver
 		// a sph.php
 		echo $json_data;
@@ -408,7 +503,7 @@ function validateIntervalChangeJournal($input_date = NULL, $output_date = NULL)
  * normales (no extras).
  * 
  */
-function validateTypeJournal($day_of_week = NULL)
+function validateTypeJournal($day_of_week = NULL, $hidde_log = FALSE)
 {
 
 	$hours_of_journal = 0;
@@ -418,13 +513,13 @@ function validateTypeJournal($day_of_week = NULL)
 		//***************** Jornada NORMAL
 		$hours_of_journal = CONFIG_PARAMS['JLNORMAL_HS'][0];
 
-		logeo("Normal Journal - OK: Hours of journal ($hours_of_journal)");
+		logeo("Normal Journal - OK: Hours of journal ($hours_of_journal)", $hidde_log);
 	} elseif ($day_of_week == CONFIG_PARAMS['JLDIF_D'][0]) {
 
 		//***************** Jornada DIFERENCIAL
 		$hours_of_journal = CONFIG_PARAMS['JLDIF_HS'][0];
 
-		logeo("Diferencial Journal - OK: Hours of journal ($hours_of_journal)");
+		logeo("Diferencial Journal - OK: Hours of journal ($hours_of_journal)", $hidde_log);
 	}
 
 	return $hours_of_journal;
