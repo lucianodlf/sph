@@ -173,9 +173,11 @@
 
                         } else {
 
-                            console.debug('Archivo cargado');
+                            console.debug('Configuracion guardada');
                             $("#msgCfgResponseSuccess").html(data.msg).fadeIn(1000);
                             $("#formSaveConfig")[0].reset();
+
+                            loadConfig();
 
                         }
 
@@ -275,6 +277,8 @@
                 $("#msgCfgResponseError").html("").hide();
                 $("#msgCfgResponseSuccess").html("").hide();
 
+                loadConfig();
+
             });
 
             $("#menuItemProcess").click(function() {
@@ -289,6 +293,39 @@
                 $("#msgResponseSuccess").html("").hide();
             });
         });
+
+
+        function loadConfig() {
+            console.debug('Load data config')
+
+            $.ajax({
+                url: "loadConfig.php",
+                type: "POST",
+                data: {
+                    code: 'load_config'
+                },
+                success: function(data) {
+                    console.debug('Success load data');
+                    // console.debug(data);
+
+                    data = JSON.parse(data);
+
+                    // console.debug(data);
+
+                    if(data.status == 1){
+                        //TODO: Mostrar y cargar feriados por año, se debe quitar el año hardcode aqui y en todos lados.
+                        $("#taFeriados").html(data.data.feriados['2020']);
+                        $("#taEmployees").html(data.data.empleados.empleados);
+                    }
+
+                },
+                error: function(data) {
+                    console.debug('Ocurrio un error al cargar datos de configuracion');
+                    console.error(data);
+
+                }
+            });
+        }
 
 
         // --------------------------------------------------------------------
