@@ -71,6 +71,16 @@
             </header>
 
             <div class="w3-row-padding w3-margin-bottom">
+                <div class="w3-panel w3-blue w3-display-container w3-round-large" style="margin:30px;">
+                    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-hover-none w3-large w3-round-large w3-display-topright">&times;</span>
+                    <h4>Recordar</h4>
+                    <ul>
+                        <li>El archivo a procesar debe ser del tipo "xlsx" (Ej: <i>horas_septiembre.xlsx</i>).</li>
+                        <li>Solo debe tener las primeras 4 columnas con datos (A,B,C,D) respectivamente A = Código de empleado, B = Nombre, C = Fecha, D = Hora (Ej: <a href="https://gitlab.com/lucianoldf/sph/-/raw/master/import/planilla_base_ejemplo.xlsx">planilla_base_ejemplo.xlsx</a>)</li>
+                    </ul>
+
+                </div>
+
                 <div id="msgResponseError" class="w3-panel w3-red w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
                 <div id="msgResponseSuccess" class="w3-panel w3-green w3-round-large" style="display: none; padding:10px; margin:30px;"></div>
 
@@ -312,7 +322,7 @@
 
                     // console.debug(data);
 
-                    if(data.status == 1){
+                    if (data.status == 1) {
                         //TODO: Mostrar y cargar feriados por año, se debe quitar el año hardcode aqui y en todos lados.
                         $("#taFeriados").html(data.data.feriados['2020']);
                         $("#taEmployees").html(data.data.empleados.empleados);
