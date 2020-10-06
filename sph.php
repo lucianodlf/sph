@@ -292,7 +292,14 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 	$absences_date_start = DateTime::createFromFormat('d/m/Y', '01/01/2020');
 	$absences_date_end = DateTime::createFromFormat('d/m/Y', '15/01/2020');
 
+	// Sumarry absences Array
+	// [ user_code ][ date ] = [ IT | IP | FF | Number ]
+	// 		Number (Cantidad horas trabajadas)
+	// 		IT 	(Inasistencia total)
+	//		IP	(Inasistencia parcial)
+	// 		FF 	(Feriado)
 	$absences_summary = [];
+	
 	$absences_cd = clone $absences_date_start;
 
 	//TODO: Esto podemos hacerlo antes de crear el array $hours_by_date.
@@ -301,11 +308,6 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 	// no tener que hacerlo duplicado aca.... ni yo me entiendo ;)
 
 	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
-	// inasistencias[ user_id ][ fecha ]: 
-	// 		# (Cantidad horas trabajadas)
-	// 		IT 	(Inasistencia total)
-	//		IP	(Inasistencia parcial)
-	// 		FF 	(Feriado)
 	while ($absences_cd <= $absences_date_end) {
 		// echo $absences_cd->format('d/m/Y') . PHP_EOL;
 
@@ -339,8 +341,8 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 		$absences_cd->add(new DateInterval('P1D'));
 	}
 
-	// var_dump($absences_summary);
 }
+
 
 //FIXME: Temporal para debug
 /* function debugHoursByDate($hours_by_date)
@@ -403,7 +405,7 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 		logeo('Export mode (terminal - xlsx)', FALSE, TRUE);
 
 		// Export data to file
-		export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
+		export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE'], $absences_summary);
 
 		logeo("Export result file: {$GLOBALS['CONFIG']['OUTPUT_FILE']}", FALSE, TRUE);
 	}

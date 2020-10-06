@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 //StringHelper::setDecimalSeparator('.');
 //StringHelper::setThousandsSeparator(',');
 
-function export($hours_data, $export_file = NULL)
+function export($hours_data, $export_file = NULL, $absences_summary = NULL)
 {
 
 	$export_file = validateFileExport($export_file);
@@ -16,7 +16,7 @@ function export($hours_data, $export_file = NULL)
 		return FALSE;
 	}
 
-	exportExcel($hours_data, $export_file);
+	exportExcel($hours_data, $export_file, $absences_summary);
 
 	return $export_file;
 }
@@ -46,7 +46,7 @@ function validateFileExport($export_file = NULL)
 }
 
 
-function exportExcel($hours_data, $export_file)
+function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 {
 
 	/** Create a new Spreadsheet Object **/
@@ -245,8 +245,156 @@ function exportExcel($hours_data, $export_file)
 		$row_data++;
 	}
 
+
+	if ($absences_summary !== NULL) {
+		exportSummaryAbsencesExcel($spreadsheet, $absences_summary);
+	}
+
+
+
+
 	$write = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
 	$write->save($export_file);
+}
 
+
+
+
+
+
+function exportSummaryAbsencesExcel($spreadsheet, $absences_summary)
+{
+
+	//Creamos nueva worksheet
+	$worksheetSummaryAbsences = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'RESUMEN INASISTENCIAS');
+
+	// Agrega la nueva worksheet con indice 1
+	$spreadsheet->addSheet($worksheetSummaryAbsences, 1);
+
+	// Activamos la nueva worksheet para trabajar sobre ella
+	$spreadsheet->setActiveSheetIndex(1);
+
+	/**
+	 *
+	 * ========================== Prepare value title for export ================================
+	 * 
+	 */
+
+	$titles = [
+		'A' => 'CU',
+		'B' => 'NOMBRE',
+		'C' => 'FECHA',
+		'D' => 'TIPO',
+		'E' => 'OBSERVACION'
+	];
+
+	$row_title = 1;
+
+	$style_title_array = [
+		'borders' => [
+			'allBorders' => [
+				'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				'color' => ['argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK],
+			],
+		],
+		'font' => [
+			'bold' => true,
+			'color' => ['argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE]
+		],
+		'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		],
+		'fill' => [
+			'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+			'startColor' => [
+				'argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK,
+			],
+		],
+	];
+
+
+	foreach ($titles as $column => $value) {
+
+		// Set columns autozise for title
+		$spreadsheet->getActiveSheet()->getColumnDimension("{$column}")->setAutoSize(TRUE);
+
+		// Set style from array
+		$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_title}")->applyFromArray($style_title_array);
+
+		// Set value
+		$spreadsheet->getActiveSheet()->setCellValue("{$column}{$row_title}", $value);
+	}
+
+
+	/**
+	 *
+	 * ========================== Prepare value data for export ================================
+	 * 
+	 */
+
+	// Set style cells of data
+	$style_data_array = [
+		'borders' => [
+			'allBorders' => [
+				'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				'color' => ['argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK],
+			],
+		],
+		'font' => [
+			'bold' => false,
+			'color' => ['argb' => \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_BLACK]
+		],
+		'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+		]
+	];
+
+	// Set array data for write excel
+	$arr_absences = [];
+
+	foreach ($absences_summary as $user_id => $dates) {
+
+		foreach ($dates as $date => $type_absence) {
+
+			$arr_absences[] = [
+				'A' => (string) $user_id,
+				'B' => (string) "NAME",
+				'C' => (string) $date,
+				'D' => (string) $type_absence,
+				'E' => (string) "",
+			];
+		}
+	}
+
+	$row_data = 2;
+
+	foreach ($arr_absences as $row) {
+
+		foreach ($row as $column => $value) {
+
+			$spreadsheet->getActiveSheet()->setCellValue("{$column}{$row_data}", $value);
+
+			$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->applyFromArray($style_data_array);
+
+			// Set style if INASISTENCIA TOTAL
+			if ($column === 'D' && $value === 'IT') {
+
+				// Set font color
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+
+				// Set background color
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
+
+				// Set bold
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->setBold(TRUE);
+			}
+		}
+
+		$row_data++;
+	}
+
+	// Volvemos a ctivar la worksheet principal
+	$spreadsheet->setActiveSheetIndex(0);
 }
