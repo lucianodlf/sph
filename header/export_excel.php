@@ -247,7 +247,7 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 
 
 	if ($absences_summary !== NULL) {
-		exportSummaryAbsencesExcel($spreadsheet, $absences_summary);
+		exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data);
 	}
 
 
@@ -263,7 +263,7 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 
 
 
-function exportSummaryAbsencesExcel($spreadsheet, $absences_summary)
+function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data)
 {
 
 	//Creamos nueva worksheet
@@ -359,7 +359,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary)
 
 			$arr_absences[] = [
 				'A' => (string) $user_id,
-				'B' => (string) "NAME",
+				'B' => (string) $hours_data[$user_id][0]['name'],
 				'C' => (string) $date,
 				'D' => (string) $type_absence,
 				'E' => (string) "",
