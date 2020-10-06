@@ -295,6 +295,23 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 	$absences_date_start = DateTime::createFromFormat('d/m/Y', '01/01/2020');
 	$absences_date_end = DateTime::createFromFormat('d/m/Y', '15/01/2020');
 
+	//FIXME: Test para obtener fechas limites segun datos procesados del excel importado
+	// almacenados en $absences_summary en el procesamiento de horas.
+	$min_date = DateTime::createFromFormat('d/m/Y', array_key_first($absences_summary[array_key_first($absences_summary)]));
+	$max_date = clone $min_date;
+
+	foreach ($absences_summary as $user => $date) {
+
+		foreach ($date as $d => $value) {
+			$current_tmp_date = DateTime::createFromFormat('d/m/Y', $d);
+			$min_date = ($current_tmp_date < $min_date) ? $current_tmp_date : $min_date;
+			$max_date = ($current_tmp_date > $max_date) ? $current_tmp_date : $max_date;
+		}
+	}
+
+	$absences_date_start = $min_date;
+	$absences_date_end = $max_date;
+
 	// Sumarry absences Array
 	// [ user_code ][ date ] = [ IT | IP | FF | Number ]
 	// 		Number (Cantidad horas trabajadas)
