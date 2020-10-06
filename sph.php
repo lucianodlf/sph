@@ -50,9 +50,10 @@ logeo('=========================================================================
 $count_iterator = 0;
 
 // Acumula total de tiempo por usuario y fecha
-// $hours_by_date[ user_id ][ date ] = x hs
-$hours_by_date = [];
-
+// [ user_id ][ date ] = x hs
+// 
+// Luego lo usamos para verificar inasistencias en un rago de fechas
+$absences_summary = [];
 
 /**
  * 
@@ -173,7 +174,9 @@ foreach ($hours_data as $user_id => $user) {
 
 			// Acumulamos 1 minuto por user_id/fecha
 			$cd = $acum_minutes_datetime->format('d/m/Y');
-			$hours_by_date[$user_id][$cd]++;
+			
+			$absences_summary[$user_id][$cd]++;
+			//$hours_by_date[$user_id][$cd]++;
 
 			// Add 1 Minute
 			$acum_minutes_datetime->add(new DateInterval('PT1M'));
@@ -298,28 +301,20 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 	// 		IT 	(Inasistencia total)
 	//		IP	(Inasistencia parcial)
 	// 		FF 	(Feriado)
-	$absences_summary = [];
 	
 	$absences_cd = clone $absences_date_start;
-
-	//TODO: Esto podemos hacerlo antes de crear el array $hours_by_date.
-	// Armar array de fechas sobre las que se aplica el resumen de inasistencias
-	// Luego al sumar las horas en $hours_by_date machear por clave de fecha y cargar el balor para 
-	// no tener que hacerlo duplicado aca.... ni yo me entiendo ;)
 
 	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
 	while ($absences_cd <= $absences_date_end) {
 		// echo $absences_cd->format('d/m/Y') . PHP_EOL;
 
 		// Recorre acumulado de horas por dia para cada usuario
-		foreach ($hours_by_date as $user_id => $date) {
-
-			$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IT';
+		foreach ($absences_summary as $user_id => $date) {
 
 			// Si existe la clave de fecha, es un dia trabajado por el usuario
 			if (key_exists($absences_cd->format('d/m/Y'), $date)) {
 
-				$total_h = $date[$absences_cd->format('d/m/Y')] / 60;
+				$total_h = $absences_summary[$user_id][$absences_cd->format('d/m/Y')] / 60;
 
 				// Almacena total de horas trabajadas por el usuario para el dia en curso
 				$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = $total_h;
@@ -329,11 +324,16 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IP';
 				}
 			} else {
+
 				// Si no existe la clave y es feriado, no se cuenta inasistencia, si no es feriado, es inasistencia.
 
 				if (in_array($absences_cd->format('d/m/Y'), CONFIG_PARAMS['FERIADOS'])) {
 					// Es feriado, valor -1
 					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'FF';
+				}else{
+
+					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IT';
+
 				}
 			}
 		}
