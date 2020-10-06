@@ -174,7 +174,7 @@ foreach ($hours_data as $user_id => $user) {
 
 			// Acumulamos 1 minuto por user_id/fecha
 			$cd = $acum_minutes_datetime->format('d/m/Y');
-			
+
 			$absences_summary[$user_id][$cd]++;
 			//$hours_by_date[$user_id][$cd]++;
 
@@ -301,7 +301,7 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 	// 		IT 	(Inasistencia total)
 	//		IP	(Inasistencia parcial)
 	// 		FF 	(Feriado)
-	
+
 	$absences_cd = clone $absences_date_start;
 
 	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
@@ -314,10 +314,14 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 			// Si existe la clave de fecha, es un dia trabajado por el usuario
 			if (key_exists($absences_cd->format('d/m/Y'), $date)) {
 
+				// Convierte los minutos a horas
 				$total_h = $absences_summary[$user_id][$absences_cd->format('d/m/Y')] / 60;
 
 				// Almacena total de horas trabajadas por el usuario para el dia en curso
 				$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = $total_h;
+
+				// Elimina el registro de minutos (solo queremos inasistencias en el resumen)
+				//unset($absences_summary[$user_id][$absences_cd->format('d/m/Y')]);
 
 				// Verificamos si es inasistencia parcial
 				if (validateTypeJournal($absences_cd->format('w'), TRUE) > $total_h) {
@@ -328,19 +332,17 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 				// Si no existe la clave y es feriado, no se cuenta inasistencia, si no es feriado, es inasistencia.
 
 				if (in_array($absences_cd->format('d/m/Y'), CONFIG_PARAMS['FERIADOS'])) {
-					// Es feriado, valor -1
+
 					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'FF';
-				}else{
+				} else {
 
 					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IT';
-
 				}
 			}
 		}
 
 		$absences_cd->add(new DateInterval('P1D'));
 	}
-
 }
 
 
