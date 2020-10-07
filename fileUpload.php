@@ -8,6 +8,24 @@ $response = [
     'msg' => 'No se cargo ningun archivo'
 ];
 
+// Save data for generate summary absences
+$summary_absences = FALSE;
+
+// Validates dates range
+if ($_POST['chSummaryAbsence']) {
+    if (DateTime::createFromFormat('d/m/Y', $_POST['dateStart']) === FALSE || DateTime::createFromFormat('d/m/Y', $_POST['dateEnd'] === FALSE)) {
+        $response['msg'] = "Ocurrio un problema con el formato de las fechas para el resumen de inasistencias.<br> Por favor verifica que se cumpla el formato dd/mm/yyyy ;)";
+        echo json_encode($response);
+        exit();
+    } else {
+
+        $summary_absences = [
+            'dateStart' => $_POST['dateStart'],
+            'dateEnd' => $_POST['dateEnd']
+        ];
+    }
+}
+
 if ($_FILES['file']['error'] === 0) {
     // echo json_encode($_FILES['file']);
 
@@ -22,15 +40,21 @@ if ($_FILES['file']['error'] === 0) {
 
         if (move_uploaded_file($tmp_path, $new_path)) {
 
+            $opt_flags = '--apiweb';
+
+            if ($summary_absences) {
+                $opt_flags .= ' --summary-absences="' . $summary_absences['dateStart'] . ',' . $summary_absences['dateEnd'] . '"';
+            }
+
             if (strtoupper(substr(PHP_OS, null, 3)) === 'WIN') {
 
                 //	var_dump(dirname($_SERVER['DOCUMENT_ROOT']) . '\php\php.exe');	
-                $output = shell_exec(dirname($_SERVER['DOCUMENT_ROOT']) . "\php\php.exe sph.php --apiweb");
+                $output = shell_exec(dirname($_SERVER['DOCUMENT_ROOT']) . "\php\php.exe sph.php " . $opt_flags);
             } else {
 
                 // Asumimos que es linux
                 // Por ahora realizado para poder desarrollar en entorno linux y desplegar en windows.
-                $output = shell_exec("php sph.php --apiweb");
+                $output = shell_exec("php sph.php " . $opt_flags);
             }
 
 
@@ -43,7 +67,6 @@ if ($_FILES['file']['error'] === 0) {
                     'localpath' => $decoded_output['localpath'],
                     'serverpath' => $_SERVER['HTTP_REFERER'] . $decoded_output['serverpath']
                 ];
-
             } else {
 
                 $response = [

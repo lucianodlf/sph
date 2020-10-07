@@ -281,9 +281,6 @@ logeo();
 
 /***************************************** SUMMARY ABSENCES **********************************/
 
-//FIXME: Force summary abcences
-$GLOBALS['CONFIG']['ABSENCES'] = TRUE;
-
 if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 	logeo('Export summary absences (TRUE)', FALSE, TRUE);
@@ -292,7 +289,7 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 	$start_date = (!empty($str_dates[0])) ? DateTime::createFromFormat('d/m/Y', $str_dates[0]) : FALSE;
 	$end_date = (!empty($str_dates[1])) ? DateTime::createFromFormat('d/m/Y', $str_dates[1]) : FALSE;
 
-	// var_dump($str_dates, $start_date, $end_date);
+	// var_dump($str_dates, $start_date, $end_date);die();
 
 	if ($start_date && $end_date) {
 
@@ -407,7 +404,7 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 		logeo('Export mode (APPIWEB)', FALSE, TRUE);
 
 		// Export data to file
-		$output = export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE']);
+		$output = export($hours_data, $GLOBALS['CONFIG']['OUTPUT_FILE'], $absences_summary);
 
 		$data_return = [
 			'status' => 0,

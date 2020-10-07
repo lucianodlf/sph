@@ -87,7 +87,24 @@
                 <form lang="es" action="uploadFile.php" method="POST" id="formUploadFile" enctype="multipart/form-data" class="w3-container w3-light-grey w3-margin">
 
                     <input class="w3-input w3-border w3-round-large" lang="es" type="file" id="file" name="file" accept="xlsx"><br>
-                    <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
+
+                    <div class="w3-row">
+                        <div class="w3-third">
+                            <input name="chSummaryAbsence" class="w3-check" type="checkbox" onclick="showOptions();">
+                            <label>Resumen de inasistencias</label>
+                        </div>
+                        <div id="optionsSummary" style="display: none;">
+                            <div class="w3-third" style="padding-right:10px;">
+                                <input id="dateStart" name="dateStart" class="w3-input w3-border w3-round" type="text" placeholder="01/01/2020">
+                            </div>
+                            <div class="w3-third">
+                                <input id="dateEnd" name="dateEnd" class="w3-input w3-border w3-round" type="text" placeholder="15/01/2020">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <input class="w3-btn w3-light-blue w3-round-large" style="margin-top: 15px; display: block;" type="submit" value="Procesar">
                     <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
                     <hr>
 
@@ -207,7 +224,7 @@
                 console.debug("submit file");
 
                 $("#msgResponseError").html("").hide();
-                $("msgResponseSuccess").html("").hide();
+                $("#msgResponseSuccess").html("").hide();
                 $("#taProccessResult").html("");
                 $("#proccessResult").hide();
                 $("#loadingGif").hide();
@@ -244,19 +261,23 @@
 
                             console.debug("Extencion de archivo invalida");
                             $("#msgResponseError").html(data.msg).fadeIn();
-                            $("#formUploadFile")[0].reset();
+                            // $("#formUploadFile")[0].reset();
+
 
                         } else if (data.status == 4) {
 
                             console.debug("Error en ejecucion de sph.php. Revisar log");
                             $("#msgResponseError").html(data.msg).fadeIn();
-                            $("#formUploadFile")[0].reset();
+                            //$("#formUploadFile")[0].reset();
 
                         } else { //data.status == 1
 
                             console.debug('Archivo cargado');
                             $("#msgResponseSuccess").html("Archivo procesado!").fadeIn();
-                            $("#formUploadFile")[0].reset();
+
+                            $("#dateStart").val('')
+                            $("#dateEnd").val('');
+                            $("#file").val('');
 
                             window.location.href = data.serverpath;
 
@@ -301,6 +322,13 @@
 
                 $("#msgResponseError").html("").hide();
                 $("#msgResponseSuccess").html("").hide();
+
+                $("#dateStart").val('')
+                $("#dateEnd").val('');
+                $("#file").val('');
+
+                //$("#taProccessResult").html('');
+
             });
         });
 
@@ -335,6 +363,11 @@
 
                 }
             });
+        }
+
+
+        function showOptions() {
+            $("#optionsSummary").toggle();
         }
 
 

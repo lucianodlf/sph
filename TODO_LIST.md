@@ -7,3 +7,5 @@ TODO_LIST
 * Mejorar documentacion en codigo
 * Mejorar nombre de variables
 * Mejorar textos de logeo y texto a usuarios
+* Formateo de codigo segun un estandar PSR...
+* Pruebas unitarias (eterno deseo...)
