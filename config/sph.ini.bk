@@ -36,8 +36,7 @@ max_hours_by_interval = 12
 text_alert_sum = "La suma del total de horas desglosadas es DIFERENTE al total 
 de horas"
 text_alert_max = "El total de horas exede las {%MAX_HOURS_BY_INTERVAL_ALERT} Hs"
-text_alert_change_journal = "El intervalo tiene un cambio de jornada entre 
-ingreso y egreso"
+text_alert_change_journal = "El intervalo tiene un cambio de jornada entre ingreso y egreso"
 [feriados]
 2020 = "01/01/2020,24/02/2020,25/02/2020,23/03/2020,24/03/2020,02/04/2020,10/04/2020,01/05/2020,25/05/2020,15/06/2020,20/06/2020,09/07/2020,10/07/2020,17/08/2020,12/10/2020,23/11/2020,07/12/2020,08/12/2020,25/12/2020"
 [empleados]

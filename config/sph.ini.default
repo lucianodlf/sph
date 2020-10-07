@@ -181,8 +181,7 @@ text_alert_max = "El total de horas exede las {%MAX_HOURS_BY_INTERVAL_ALERT} Hs"
 ; jornada. El cambio de jornada se considera cuando entre las dos fecha del 
 ; intervalo se pasa de una jornada normal (configurada en 'jlnormal_d')
 ; a una jornada diferencial (configurada en 'jldif_d')
-text_alert_change_journal = "El intervalo tiene un cambio de jornada entre 
-ingreso y egreso"
+text_alert_change_journal = "El intervalo tiene un cambio de jornada entre ingreso y egreso"
 ;-------------------------------------------------------------------------------
 
 
