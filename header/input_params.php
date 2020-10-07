@@ -1,5 +1,5 @@
 <?php
-
+//TODO: Improvement usage DOC to be redeable and fit the use cases
 // Define doc options
 $doc = <<<DOC
 Usage: 
@@ -13,9 +13,9 @@ Usage:
 	[--d-hidde-log-by-minute] [--d-range-datetime=VALUE] 
 	[--not-export-excel] [--i-file=FILE | --i-dir-path=DIR] [--o-file=FILE | --o-dir-path=DIR] 
 	[--date-format-read=FORMAT] [--date-format-show=FORMAT]
-	[--range-read=RANGE] [--sort-order=ORDER] [--verbose]
+	[--range-read=RANGE] [--sort-order=ORDER] [--verbose] [--summary-absences=VALUE]
 	sph.php --version
-	sph.php --apiweb [--i-file=FILE | --i-dir-path=DIR] [--o-file=FILE | --o-dir-path=DIR] 
+	sph.php --apiweb [--i-file=FILE | --i-dir-path=DIR] [--o-file=FILE | --o-dir-path=DIR] [--summary-absences=VALUE]
 
 Example: 
 	php sph.php --i-file=./import/planilla_horas_base_2.xlsx
@@ -32,6 +32,8 @@ Options:
 --apiweb	Enable mode web
 --version
 
+[Summary]
+--summary-absences=VALUE		specify if export summary absences (VALUE=date-start,date-end). Example: "01/01/2020,15/01/2020"
 
 [File]
 --i-file=FILE			specify output file export
@@ -391,6 +393,14 @@ if ($args['--not-export-excel'] || $args['-x']) {
 
 	$gconfig['EXPORT_EXCEL'] = FALSE;
 }
+
+
+// For summary absences
+if ($args['--summary-absences']) {
+
+	$gconfig['SUMMARY-ABSENCES'] = trim($args['--summary-absences']);
+}
+
 
 // For specify DEBUG MODE ENABLE
 if ($args['-d'] || $args['--debug-mode']) {

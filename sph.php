@@ -16,7 +16,6 @@ logeo("Start script", FALSE, TRUE);
 // Import and prepare data to process
 $hours_data = import($GLOBALS['CONFIG']['INPUT_FILE']);
 
-
 logeo("Process ...", FALSE, TRUE);
 
 logeo(PHP_EOL, FALSE, FALSE, TRUE);
@@ -285,32 +284,44 @@ logeo();
 //FIXME: Force summary abcences
 $GLOBALS['CONFIG']['ABSENCES'] = TRUE;
 
-if ($GLOBALS['CONFIG']['ABSENCES']) {
+if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 	logeo('Export summary absences (TRUE)', FALSE, TRUE);
 
-	// Simula limite de fecha para emitir resumen de asistencias.
-	// TODO: Para tener coherencia con la planilla importada los limites podrian
-	// ser calculados en funcion de las fechas minimo y maximo de la planilla.
-	$absences_date_start = DateTime::createFromFormat('d/m/Y', '01/01/2020');
-	$absences_date_end = DateTime::createFromFormat('d/m/Y', '15/01/2020');
+	$str_dates =  explode(",", $GLOBALS['CONFIG']['SUMMARY-ABSENCES']);
+	$start_date = (!empty($str_dates[0])) ? DateTime::createFromFormat('d/m/Y', $str_dates[0]) : FALSE;
+	$end_date = (!empty($str_dates[1])) ? DateTime::createFromFormat('d/m/Y', $str_dates[1]) : FALSE;
 
-	//FIXME: Test para obtener fechas limites segun datos procesados del excel importado
-	// almacenados en $absences_summary en el procesamiento de horas.
-	$min_date = DateTime::createFromFormat('d/m/Y', array_key_first($absences_summary[array_key_first($absences_summary)]));
-	$max_date = clone $min_date;
+	// var_dump($str_dates, $start_date, $end_date);
 
-	foreach ($absences_summary as $user => $date) {
+	if ($start_date && $end_date) {
 
-		foreach ($date as $d => $value) {
-			$current_tmp_date = DateTime::createFromFormat('d/m/Y', $d);
-			$min_date = ($current_tmp_date < $min_date) ? $current_tmp_date : $min_date;
-			$max_date = ($current_tmp_date > $max_date) ? $current_tmp_date : $max_date;
+		$absences_date_start = $start_date;
+		$absences_date_end = $end_date;
+	} else {
+		logeo('Export summary absences get limit dates from prosecced data', FALSE, TRUE);
+
+		// WARNING: The dates of processed data must be ordened from minimum to maximum
+		// Datetime minimum in processed data
+		$min_date = DateTime::createFromFormat('d/m/Y', array_key_first($absences_summary[array_key_first($absences_summary)]));
+		// Datetime maximum start value
+		$max_date = clone $min_date;
+
+		// Detects minimum and maximum dates on processed data
+		foreach ($absences_summary as $user => $date) {
+
+			foreach ($date as $d => $value) {
+				$current_tmp_date = DateTime::createFromFormat('d/m/Y', $d);
+				$min_date = ($current_tmp_date < $min_date) ? $current_tmp_date : $min_date;
+				$max_date = ($current_tmp_date > $max_date) ? $current_tmp_date : $max_date;
+			}
 		}
+
+		$absences_date_start = $min_date;
+		$absences_date_end = $max_date;
 	}
 
-	$absences_date_start = $min_date;
-	$absences_date_end = $max_date;
+	logeo('Export summary absences dates = ' . $absences_date_start->format('d/m/Y') . ', ' . $absences_date_end->format('d/m/Y'), FALSE, TRUE);
 
 	// Sumarry absences Array
 	// [ user_code ][ date ] = [ IT | IP | FF | Number ]
@@ -318,7 +329,6 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 	// 		IT 	(Inasistencia total)
 	//		IP	(Inasistencia parcial)
 	// 		FF 	(Feriado)
-
 	$absences_cd = clone $absences_date_start;
 
 	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
@@ -361,7 +371,6 @@ if ($GLOBALS['CONFIG']['ABSENCES']) {
 		$absences_cd->add(new DateInterval('P1D'));
 	}
 }
-
 
 //FIXME: Temporal para debug
 /* function debugHoursByDate($hours_by_date)

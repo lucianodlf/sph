@@ -44,6 +44,7 @@ function getDefaultGlobalConfig($hconfig = NULL)
 	$gconfig['QUIET'] = FALSE;
 	$gconfig['EXPORT_EXCEL'] = TRUE;
 	$gconfig['APIWEB'] = FALSE;
+	$gconfig['SUMMARY-ABSENCES'] = FALSE;
 
 	$gconfig['TEXT_ALERT_SUM_HOURS_OBS'] = 'La suma del total de horas desglosadas es DIFERENTE al total de horas';
 
