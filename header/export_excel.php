@@ -381,7 +381,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 			if ($column === 'D' && $value === 'IT') {
 
 				// Set font color
-				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+				// $spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
 
 				// Set background color
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
@@ -392,7 +392,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 			} else if ($column === 'D' && $value === 'IP') {
 
 				// Set font color
-				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+				// $spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
 
 				// Set background color
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
@@ -405,6 +405,30 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 
 		$row_data++;
 	}
+
+	$spreadsheet->getActiveSheet()->getStyle("G2:H5")->applyFromArray($style_data_array);
+	$spreadsheet->getActiveSheet()->getColumnDimension("H")->setAutoSize(TRUE);
+
+	// Set font color
+	//$spreadsheet->getActiveSheet()->getStyle("G2:G4")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+	
+	// Set background color
+	$spreadsheet->getActiveSheet()->getStyle("G2:G4")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+	$spreadsheet->getActiveSheet()->getStyle("G2")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
+	$spreadsheet->getActiveSheet()->getStyle("G3")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_YELLOW);
+	$spreadsheet->getActiveSheet()->getStyle("G4")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_GREEN);
+
+	// Set bold
+	$spreadsheet->getActiveSheet()->getStyle("G2:G5")->getFont()->setBold(TRUE);
+	$spreadsheet->getActiveSheet()->setCellValue("G2", "IT");
+	$spreadsheet->getActiveSheet()->setCellValue("G3", "IP");
+	$spreadsheet->getActiveSheet()->setCellValue("G4", "FF");
+	$spreadsheet->getActiveSheet()->setCellValue("G5", "N");
+
+	$spreadsheet->getActiveSheet()->setCellValue("H2", "Inasistencia Total");
+	$spreadsheet->getActiveSheet()->setCellValue("H3", "Inasistencia Parcial");
+	$spreadsheet->getActiveSheet()->setCellValue("H4", "Feriado");
+	$spreadsheet->getActiveSheet()->setCellValue("H5", "Cantidad de horas registradas");
 
 	// Volvemos a ctivar la worksheet principal
 	$spreadsheet->setActiveSheetIndex(0);
