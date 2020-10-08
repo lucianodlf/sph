@@ -357,15 +357,30 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 
 		foreach ($dates as $date => $type_absence) {
 
+			switch (DateTime::createFromFormat('d/m/Y', $date)->format('w')) {
+				case "0":
+					$obs = 'Domingo';
+					break;
+				case "6":
+					$obs = 'Sábado';
+					break;
+				default:
+					$obs = '';
+					break;
+			}
+
+
 			$arr_absences[] = [
 				'A' => (string) $user_id,
 				'B' => (string) $hours_data[$user_id][0]['name'],
 				'C' => (string) $date,
 				'D' => (string) $type_absence,
-				'E' => (string) "",
+				'E' => (string) $obs,
 			];
 		}
 	}
+
+
 
 	$row_data = 2;
 
@@ -411,7 +426,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 
 	// Set font color
 	//$spreadsheet->getActiveSheet()->getStyle("G2:G4")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
-	
+
 	// Set background color
 	$spreadsheet->getActiveSheet()->getStyle("G2:G4")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
 	$spreadsheet->getActiveSheet()->getStyle("G2")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_RED);
