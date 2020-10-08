@@ -193,6 +193,10 @@ foreach ($hours_data as $user_id => $user) {
 
 				$minutes_interval_result['alert_max_hours'] = TRUE;
 				$minutes_interval_result['alert_max_hours_obs'] = $GLOBALS['CONFIG']['TEXT_ALERT_MAX_HOURS_OBS'];
+
+				$diff_interval = $interval['output']['dateTime']->diff($interval['input']['dateTime']);
+				$minutes_interval_result['alert_max_hours_obs'] .= " (Diferencia ingreso/egreso: " . $diff_interval->format('%h Horas') . ") ";
+				// var_dump($diff_interval->format('%h Horas')); die();
 			}
 
 			// Get num day of week
@@ -346,7 +350,10 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 			// Si existe la clave de fecha, es un dia trabajado por el usuario
 			if (key_exists($absences_cd->format('d/m/Y'), $date)) {
-
+				
+				// var_dump($absences_cd->format('d/m/Y'));
+				// var_dump($absences_summary[$user_id][$absences_cd->format('d/m/Y')]);
+				
 				// Convierte los minutos a horas
 				$total_h = $absences_summary[$user_id][$absences_cd->format('d/m/Y')] / 60;
 
@@ -359,6 +366,9 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 				// Verificamos si es inasistencia parcial
 				if (validateTypeJournal($absences_cd->format('w'), TRUE) > $total_h) {
 					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IP';
+
+					// var_dump(validateTypeJournal($absences_cd->format('w')));
+					// var_dump($total_h);die();
 				}
 			} else {
 
