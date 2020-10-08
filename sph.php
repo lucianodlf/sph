@@ -278,6 +278,8 @@ logeo('=========================================================================
 
 logeo();
 
+// var_dump($absences_summary);
+// var_dump($GLOBALS['CONFIG']['SUMMARY-ABSENCES']);die();
 
 /***************************************** SUMMARY ABSENCES **********************************/
 
@@ -292,11 +294,12 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 	// var_dump($str_dates, $start_date, $end_date);die();
 
 	if ($start_date && $end_date) {
+		logeo('Export summary absences with dates range', FALSE, TRUE);
 
 		$absences_date_start = $start_date;
 		$absences_date_end = $end_date;
 	} else {
-		logeo('Export summary absences get limit dates from prosecced data', FALSE, TRUE);
+		logeo('Export summary absences get range dates from prosecced data', FALSE, TRUE);
 
 		// WARNING: The dates of processed data must be ordened from minimum to maximum
 		// Datetime minimum in processed data
@@ -330,10 +333,13 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
 	while ($absences_cd <= $absences_date_end) {
+		
 		// echo $absences_cd->format('d/m/Y') . PHP_EOL;
 
 		// Recorre acumulado de horas por dia para cada usuario
 		foreach ($absences_summary as $user_id => $date) {
+
+			// $absences_summary[$user_id][$absences_cd->format('d/m/Y')] = '??';
 
 			// Si existe la clave de fecha, es un dia trabajado por el usuario
 			if (key_exists($absences_cd->format('d/m/Y'), $date)) {
@@ -368,21 +374,6 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 		$absences_cd->add(new DateInterval('P1D'));
 	}
 }
-
-//FIXME: Temporal para debug
-/* function debugHoursByDate($hours_by_date)
-{
-	if (!$hours_by_date) return NULL;
-	
-	foreach ($hours_by_date as $user_id => $date) {
-		foreach ($date as $d => $minutes) {
-			logeo($user_id . " [ " . $d . " ] = " . $minutes / 60 . " Hs", FALSE,TRUE);
-		}
-	}
-}
- */
-
-
 
 
 if (!$GLOBALS['CONFIG']['QUIET']) {

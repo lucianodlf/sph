@@ -396,11 +396,13 @@ if ($args['--not-export-excel'] || $args['-x']) {
 
 
 // For summary absences
-if ($args['--summary-absences']) {
-
-	$gconfig['SUMMARY-ABSENCES'] = trim($args['--summary-absences']);
+if ($args['--summary-absences'] !== NULL) {
+	if( strtolower($args['--summary-absences']) == "null" || $args['--summary-absences'] === "" ){
+		$gconfig['SUMMARY-ABSENCES'] = TRUE;	
+	}else{
+		$gconfig['SUMMARY-ABSENCES'] = trim($args['--summary-absences']);
+	}
 }
-
 
 // For specify DEBUG MODE ENABLE
 if ($args['-d'] || $args['--debug-mode']) {
