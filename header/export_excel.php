@@ -361,9 +361,13 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 				case "0":
 					$obs = 'Domingo';
 					break;
+				case "5":
+					$obs = 'Viernes';
+					break;
 				case "6":
 					$obs = 'Sábado';
 					break;
+
 				default:
 					$obs = '';
 					break;
