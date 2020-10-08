@@ -1,4 +1,7 @@
 <?php
+
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(!E_NOTICE);
@@ -333,7 +336,7 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 	// Recorremos desde fecha inicio a fecha fin y armamos array para resumen de inasistencias
 	while ($absences_cd <= $absences_date_end) {
-		
+
 		// echo $absences_cd->format('d/m/Y') . PHP_EOL;
 
 		// Recorre acumulado de horas por dia para cada usuario
@@ -374,6 +377,22 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 		$absences_cd->add(new DateInterval('P1D'));
 	}
 }
+
+// var_dump($absences_summary);
+// var_dump("comienza");
+
+foreach ($absences_summary as $user_id => $dates) {
+
+	// var_dump("before uksort: " . json_encode($dates));
+
+	uksort($dates, 'compareByTimestampSummary');
+
+	// var_dump("after uksort: " . json_encode($dates));
+	$absences_summary[$user_id] = $dates;
+}
+
+// var_dump($absences_summary);
+// var_dump("fin");die();
 
 
 if (!$GLOBALS['CONFIG']['QUIET']) {

@@ -24,6 +24,34 @@ function compareByTimestamp($time1, $time2)
 }
 
 
+/**
+ * Compara dos fechas tomando el string de fechas
+ * con formato dd/mm/yyyy
+ * 
+ * Utilizado para uksort 
+ */
+function compareByTimestampSummary($time1, $time2)
+{
+	// echo "(fechas) t1 = $time1 | t2 = $time2 \n";
+
+	$time1 = DateTime::createFromFormat('d/m/Y', $time1)->getTimestamp();
+	$time2 = DateTime::createFromFormat('d/m/Y', $time2)->getTimestamp();
+
+	// echo "(unix) t1 = $time1 | t2 = $time2 \n";
+
+	if ($time1 < $time2) {
+
+		return -1;
+	} else if ($time1 > $time2) {
+
+		return 1;
+	} else {
+
+		return 0;
+	}
+}
+
+
 
 /**
  * Convierte un valor entero de minutos a un string
