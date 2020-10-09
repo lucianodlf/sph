@@ -10,19 +10,24 @@ $response = [
 
 // Save data for generate summary absences
 $summary_absences = FALSE;
-
+// var_dump($_POST);
 // Validates dates range
-if ($_POST['chSummaryAbsence']) {
-    if (DateTime::createFromFormat('d/m/Y', $_POST['dateStart']) === FALSE || DateTime::createFromFormat('d/m/Y', $_POST['dateEnd'] === FALSE)) {
-        $response['msg'] = "Ocurrio un problema con el formato de las fechas para el resumen de inasistencias.<br> Por favor verifica que se cumpla el formato dd/mm/yyyy ;)";
-        echo json_encode($response);
-        exit();
-    } else {
+if ($_POST['chSummaryAbsence'] == "on") {
+
+    $ds = DateTime::createFromFormat('d/m/Y', $_POST['dateStart']);
+    $de = DateTime::createFromFormat('d/m/Y', $_POST['dateEnd']);
+
+    if ((empty($_POST['dateStart']) && empty($_POST['dateEnd'])) || ($ds && $de)) {
 
         $summary_absences = [
             'dateStart' => $_POST['dateStart'],
             'dateEnd' => $_POST['dateEnd']
         ];
+    } else {
+
+        $response['msg'] = "Ocurrio un problema con el formato de las fechas para el resumen de inasistencias.<br> Por favor verifica que se cumpla el formato dd/mm/yyyy ;)";
+        echo json_encode($response);
+        exit();
     }
 }
 
@@ -65,7 +70,8 @@ if ($_FILES['file']['error'] === 0) {
                 $response = [
                     'status' => 1,
                     'localpath' => $decoded_output['localpath'],
-                    'serverpath' => $_SERVER['HTTP_REFERER'] . $decoded_output['serverpath']
+                    'serverpath' => $_SERVER['HTTP_REFERER'] . $decoded_output['serverpath'],
+                    'aditional_msg' => $decoded_output['aditional_msg']
                 ];
             } else {
 

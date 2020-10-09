@@ -413,7 +413,7 @@ if (!$GLOBALS['CONFIG']['QUIET']) {
 	showResult($hours_data);
 }
 
-
+// var_dump($GLOBALS['ALERT_TOTAL_ODD_RECORDS']);die();
 
 if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 
@@ -429,13 +429,15 @@ if ($GLOBALS['CONFIG']['EXPORT_EXCEL']) {
 		$data_return = [
 			'status' => 0,
 			'serverpath' => '',
-			'localpath' => ''
+			'localpath' => '',
+			'aditional_msg' => ''
 		];
 
 		if (file_exists($output)) {
 			$data_return['localpath'] = realpath($output);
 			$data_return['serverpath'] = $output;
 			$data_return['status'] = 1;
+			$data_return['aditional_msg'] = key_exists('ALERT_TOTAL_ODD_RECORDS', $GLOBALS) ? $GLOBALS['ALERT_TOTAL_ODD_RECORDS'] : '';
 		}
 
 		$json_data = json_encode($data_return);

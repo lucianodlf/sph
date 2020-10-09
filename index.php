@@ -274,6 +274,12 @@
 
                             console.debug('Archivo cargado');
                             $("#msgResponseSuccess").html("Archivo procesado!").fadeIn();
+                            
+                            let msg_proccess_result = ''
+
+                            if(data.aditional_msg != ''){
+                                msg_proccess_result += data.aditional_msg + '\n';
+                            }
 
                             $("#dateStart").val('')
                             $("#dateEnd").val('');
@@ -281,7 +287,9 @@
 
                             window.location.href = data.serverpath;
 
-                            $("#taProccessResult").html(data.localpath);
+                            msg_proccess_result += data.localpath;
+
+                            $("#taProccessResult").html(msg_proccess_result);
                             $("#proccessResult").fadeIn();
 
                         }
