@@ -139,6 +139,8 @@ function prepareData($sheet_data)
 	if ($count_row % 2 !== 0) {
 
 		logeo("WARNING: El numero de registros procesados no es PAR", FALSE, TRUE, FALSE);
+
+		$GLOBALS['ALERT_TOTAL_ODD_RECORDS'] = "WARNING: El numero de registros procesados no es PAR";
 	}
 
 
@@ -152,12 +154,19 @@ function prepareData($sheet_data)
 		}
 	}
 
+	$flg_odd_records = FALSE;
 
 	// For construct INTERVALS of time
 	foreach ($hours_data as $key => $user) {
 
 		$arr_interval = [];
 		$count_interval_by_user = 0;
+		
+		if(count($user) % 2 != 0){
+			$flg_odd_records = TRUE;
+		}
+
+		// var_dump($user); die();
 
 		foreach ($user as $idx => $interval) {
 
@@ -196,13 +205,23 @@ function prepareData($sheet_data)
 						$arr_interval['input']['is_date_fixed'] = TRUE;
 					}
 				}
-				//TODO: fin de prueba de fix error
+				
 
+				//TODO: Este array es cualquiera!!! hablando en serio:
+				// Tiene muchos datos duplicados, revisar la estructura y modificarla
+				// Unificar datos a lo largo de todo el ciclo.
 				$hours_data[$key]['INTERVALS'][$name_interval] = $arr_interval;
+
+				$hours_data[$key]['INTERVALS'][$name_interval]['is_odd_records'] = $flg_odd_records;
 
 				$count_interval_by_user++;
 			}
 		}
+
+		// var_dump($flg_odd_records);
+		// var_dump($hours_data);
+
+		$flg_odd_records = FALSE;
 
 		$count_days_in_interval = 0;
 	}

@@ -196,6 +196,8 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 
 		foreach ($user['INTERVALS'] as $interval_id => $interval) {
 
+			// var_dump($interval); die();
+
 			$arr_data_users[] = [
 				'A' => (string) $user_id,
 				'B' => (string) $interval['input']['name'],
@@ -223,6 +225,8 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 
 		foreach ($row as $column => $value) {
 
+			// var_dump($hours_data[$row['A']]['INTERVALS'][$row['C']]['is_odd_records']); die();
+
 			$spreadsheet->getActiveSheet()->setCellValue("{$column}{$row_data}", $value);
 
 			$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->applyFromArray($style_data_array);
@@ -240,6 +244,13 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 				// Set bold
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->setBold(TRUE);
 			}
+
+			if($hours_data[$row['A']]['INTERVALS'][$row['C']]['is_odd_records']){
+				$spreadsheet->getActiveSheet()->getStyle("A$row_data:E$row_data")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+				$spreadsheet->getActiveSheet()->getStyle("A$row_data:E$row_data")->getFill()->getStartColor()->setARGB("FF5722");
+			}
+
+
 		}
 
 		$row_data++;
