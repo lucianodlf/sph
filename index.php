@@ -103,9 +103,15 @@
                         </div>
 
                     </div>
+                    <br>
 
-                    <input class="w3-btn w3-light-blue w3-round-large" style="margin-top: 15px; display: block;" type="submit" value="Procesar">
-                    <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="width:50%;max-width:50px;display: none;" class="w3-round" alt="loading">
+                    <div class="w3-cell">
+                        <input class="w3-btn w3-light-blue w3-round-large" type="submit" value="Procesar">
+                    </div>
+                    <div class="w3-cell">
+                        <img id="loadingGif" src="assets/Infinity-1s-200px.gif" style="max-width:40px; margin-left:10px; display: none;" class="w3-round" alt="loading">
+                    </div>
+
                     <hr>
 
                     <div id="proccessResult" style="display: none;">
@@ -164,7 +170,7 @@
         $(document).ready(function(e) {
 
             console.debug('ready document');
-
+            
             $("#formSaveConfig").on('submit', (function(e) {
                 e.preventDefault();
 
@@ -274,10 +280,10 @@
 
                             console.debug('Archivo cargado');
                             $("#msgResponseSuccess").html("Archivo procesado!").fadeIn();
-                            
+
                             let msg_proccess_result = ''
 
-                            if(data.aditional_msg != ''){
+                            if (data.aditional_msg != '') {
                                 msg_proccess_result += data.aditional_msg + '\n';
                             }
 
