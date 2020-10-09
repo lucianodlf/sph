@@ -350,10 +350,10 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 			// Si existe la clave de fecha, es un dia trabajado por el usuario
 			if (key_exists($absences_cd->format('d/m/Y'), $date)) {
-				
+
 				// var_dump($absences_cd->format('d/m/Y'));
 				// var_dump($absences_summary[$user_id][$absences_cd->format('d/m/Y')]);
-				
+
 				// Convierte los minutos a horas
 				$total_h = $absences_summary[$user_id][$absences_cd->format('d/m/Y')] / 60;
 
@@ -386,20 +386,23 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 
 		$absences_cd->add(new DateInterval('P1D'));
 	}
+
+	// var_dump($absences_summary);
+	// var_dump("comienza");
+
+	foreach ($absences_summary as $user_id => $dates) {
+
+		// var_dump("before uksort: " . json_encode($dates));
+
+		uksort($dates, 'compareByTimestampSummary');
+
+		// var_dump("after uksort: " . json_encode($dates));
+		$absences_summary[$user_id] = $dates;
+	}
+}else{
+	$absences_summary = NULL;
 }
 
-// var_dump($absences_summary);
-// var_dump("comienza");
-
-foreach ($absences_summary as $user_id => $dates) {
-
-	// var_dump("before uksort: " . json_encode($dates));
-
-	uksort($dates, 'compareByTimestampSummary');
-
-	// var_dump("after uksort: " . json_encode($dates));
-	$absences_summary[$user_id] = $dates;
-}
 
 // var_dump($absences_summary);
 // var_dump("fin");die();

@@ -10,7 +10,7 @@ $response = [
 
 // Save data for generate summary absences
 $summary_absences = FALSE;
-// var_dump($_POST);
+
 // Validates dates range
 if ($_POST['chSummaryAbsence'] == "on") {
 
@@ -31,6 +31,9 @@ if ($_POST['chSummaryAbsence'] == "on") {
     }
 }
 
+// var_dump($summary_absences);
+// var_dump($_POST); die();
+
 if ($_FILES['file']['error'] === 0) {
     // echo json_encode($_FILES['file']);
 
@@ -48,8 +51,15 @@ if ($_FILES['file']['error'] === 0) {
             $opt_flags = '--apiweb';
 
             if ($summary_absences) {
-                $opt_flags .= ' --summary-absences="' . $summary_absences['dateStart'] . ',' . $summary_absences['dateEnd'] . '"';
+                if(!empty($summary_absences['dateStart']) && !empty($summary_absences['dateEnd'])){
+                    $opt_flags .= ' --summary-absences="' . $summary_absences['dateStart'] . ',' . $summary_absences['dateEnd'] . '"';
+                }else{
+                    $opt_flags .= ' --summary-absences=""';
+                }
+                
             }
+
+            // var_dump($opt_flags); die();
 
             if (strtoupper(substr(PHP_OS, null, 3)) === 'WIN') {
 
