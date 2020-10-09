@@ -10,12 +10,14 @@ $response = [
 
 $cfg_array = getConfigFile();
 
+$current_year = date('Y');
+
 // Modificamos datos de configuracion segun obtengamos por post
 if (!empty($_POST['taFeriados'])) {
 
     //TODO: Actualmente solo graba feriados para el año en curso.
     // Modificar para agregar año seleccionable
-    $current_year = date('Y');
+   
 
     if (!key_exists('feriados', $cfg_array)) $cfg_array['feriados'] = [];
 
