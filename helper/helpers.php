@@ -127,9 +127,9 @@ function createDirectory($path)
 
 
 /**
-* Valida y retorna un mesaje de observacion sobre
-* las alertas en caso de que existan 
-*/
+ * Valida y retorna un mesaje de observacion sobre
+ * las alertas en caso de que existan 
+ */
 function returnObservationAlert($interval_data)
 {
 	$msg = NULL;
@@ -155,10 +155,10 @@ function returnObservationAlert($interval_data)
 
 
 /**
-* Valida y retorna un estado de alerta
-* si se presentan algunos de los casos
-* validados
-*/
+ * Valida y retorna un estado de alerta
+ * si se presentan algunos de los casos
+ * validados
+ */
 function returnStatusAlert($interval_data)
 {
 
@@ -178,4 +178,15 @@ function returnStatusAlert($interval_data)
 	}
 
 	return FALSE;
+}
+
+
+if (!function_exists('array_key_first')) {
+	function array_key_first(array $arr)
+	{
+		foreach ($arr as $key => $unused) {
+			return $key;
+		}
+		return NULL;
+	}
 }
