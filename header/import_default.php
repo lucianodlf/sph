@@ -18,7 +18,7 @@ function import($input_file = NULL)
 	}
 
 	logeo('ERROR: Not input file exist');
-	exit(1);
+	return array('status' => 0, 'msg' => 'ERROR: No existe archivo de importacion');
 }
 
 
@@ -117,7 +117,11 @@ function prepareData($sheet_data)
 		if (!$day_date_time) {
 			logeo("ERROR: Existe algun error al procesar los datos del archivo importado. (index-row: $idx)", FALSE, TRUE, FALSE);
 			logeo("Verificar si el excel tiene los titulos, si es asi, quitar esa fila ;)", FALSE, TRUE, FALSE);
-			exit(1);
+			return array(
+				'status' => 0,
+				'msg' => "ERROR: Existe algun error al procesar los datos del archivo importado. (index-row: $idx) \n.
+			Verificar si el excel tiene los titulos, si es asi, quitar esa fila ;)"
+			);
 		}
 
 
@@ -161,8 +165,8 @@ function prepareData($sheet_data)
 
 		$arr_interval = [];
 		$count_interval_by_user = 0;
-		
-		if(count($user) % 2 != 0){
+
+		if (count($user) % 2 != 0) {
 			$flg_odd_records = TRUE;
 		}
 
@@ -205,7 +209,7 @@ function prepareData($sheet_data)
 						$arr_interval['input']['is_date_fixed'] = TRUE;
 					}
 				}
-				
+
 
 				//TODO: Este array es cualquiera!!! hablando en serio:
 				// Tiene muchos datos duplicados, revisar la estructura y modificarla

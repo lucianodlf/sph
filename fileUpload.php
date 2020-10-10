@@ -51,12 +51,11 @@ if ($_FILES['file']['error'] === 0) {
             $opt_flags = '--apiweb';
 
             if ($summary_absences) {
-                if(!empty($summary_absences['dateStart']) && !empty($summary_absences['dateEnd'])){
+                if (!empty($summary_absences['dateStart']) && !empty($summary_absences['dateEnd'])) {
                     $opt_flags .= ' --summary-absences="' . $summary_absences['dateStart'] . ',' . $summary_absences['dateEnd'] . '"';
-                }else{
+                } else {
                     $opt_flags .= ' --summary-absences=""';
                 }
-                
             }
 
             // var_dump($opt_flags); die();
@@ -72,16 +71,24 @@ if ($_FILES['file']['error'] === 0) {
                 $output = shell_exec("php sph.php " . $opt_flags);
             }
 
+            // var_dump($output);
 
             $decoded_output = (array) json_decode($output);
 
-            if ($decoded_output['status'] == 1) {
+            // var_dump($decoded_output);die();
+
+            if (key_exists('status', $decoded_output) && $decoded_output['status'] == 1) {
 
                 $response = [
                     'status' => 1,
                     'localpath' => $decoded_output['localpath'],
                     'serverpath' => $_SERVER['HTTP_REFERER'] . $decoded_output['serverpath'],
                     'aditional_msg' => $decoded_output['aditional_msg']
+                ];
+            } else if (key_exists('status', $decoded_output) && $decoded_output['status'] == -1) {
+                $response = [
+                    'status' => 4,
+                    'msg' => $decoded_output['aditional_msg']
                 ];
             } else {
 

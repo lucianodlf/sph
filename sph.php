@@ -19,6 +19,22 @@ logeo("Start script", FALSE, TRUE);
 // Import and prepare data to process
 $hours_data = import($GLOBALS['CONFIG']['INPUT_FILE']);
 
+// In case of error for import file, return according cli or apiweb.
+if (key_exists('status', $hours_data) && $hours_data['status'] == 0) {
+	if ($GLOBALS['CONFIG']['APIWEB']) {
+
+		echo json_encode(array(
+			'status' => -1,
+			'serverpath' => '',
+			'localpath' => '',
+			'aditional_msg' => $hours_data['msg']
+		));
+		exit();
+	}else{
+		exit();
+	}
+}
+
 logeo("Process ...", FALSE, TRUE);
 
 logeo(PHP_EOL, FALSE, FALSE, TRUE);
@@ -399,7 +415,7 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 		// var_dump("after uksort: " . json_encode($dates));
 		$absences_summary[$user_id] = $dates;
 	}
-}else{
+} else {
 	$absences_summary = NULL;
 }
 
