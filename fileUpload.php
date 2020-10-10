@@ -12,7 +12,7 @@ $response = [
 $summary_absences = FALSE;
 
 // Validates dates range
-if ($_POST['chSummaryAbsence'] == "on") {
+if (key_exists('chSummaryAbsence', $_POST) && $_POST['chSummaryAbsence'] == "on") {
 
     $ds = DateTime::createFromFormat('d/m/Y', $_POST['dateStart']);
     $de = DateTime::createFromFormat('d/m/Y', $_POST['dateEnd']);
