@@ -245,12 +245,10 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->setBold(TRUE);
 			}
 
-			if($hours_data[$row['A']]['INTERVALS'][$row['C']]['is_odd_records']){
+			if ($hours_data[$row['A']]['INTERVALS'][$row['C']]['is_odd_records']) {
 				$spreadsheet->getActiveSheet()->getStyle("A$row_data:E$row_data")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
 				$spreadsheet->getActiveSheet()->getStyle("A$row_data:E$row_data")->getFill()->getStartColor()->setARGB("FF5722");
 			}
-
-
 		}
 
 		$row_data++;
@@ -406,8 +404,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 			$spreadsheet->getActiveSheet()->setCellValue("{$column}{$row_data}", $value);
 
 			$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->applyFromArray($style_data_array);
-
-			// Set style if INASISTENCIA TOTAL
+			
 			if ($column === 'D' && $value === 'IT') {
 
 				// Set font color
@@ -419,7 +416,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 
 				// Set bold
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->setBold(TRUE);
-			} else if ($column === 'D' && $value === 'IP') {
+			}else if ($column === 'D' && validateTypeJournal(DateTime::createFromFormat('d/m/Y', $row['C'])->format('w'), TRUE) > $value) {
 
 				// Set font color
 				// $spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
@@ -427,6 +424,15 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 				// Set background color
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_YELLOW);
+
+				// Set bold
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->setBold(TRUE);
+			}
+			
+			if ($column === 'D' && $value === 'FF') {
+				// Set background color
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFill()->getStartColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_GREEN);
 
 				// Set bold
 				$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->getFont()->setBold(TRUE);
@@ -451,7 +457,7 @@ function exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data
 	// Set bold
 	$spreadsheet->getActiveSheet()->getStyle("G2:G5")->getFont()->setBold(TRUE);
 	$spreadsheet->getActiveSheet()->setCellValue("G2", "IT");
-	$spreadsheet->getActiveSheet()->setCellValue("G3", "IP");
+	$spreadsheet->getActiveSheet()->setCellValue("G3", "");
 	$spreadsheet->getActiveSheet()->setCellValue("G4", "FF");
 	$spreadsheet->getActiveSheet()->setCellValue("G5", "N");
 

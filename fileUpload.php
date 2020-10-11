@@ -29,6 +29,8 @@ if (key_exists('chSummaryAbsence', $_POST) && $_POST['chSummaryAbsence'] == "on"
         echo json_encode($response);
         exit();
     }
+
+    // var_dump($summary_absences);die();
 }
 
 // var_dump($summary_absences);
@@ -58,7 +60,7 @@ if ($_FILES['file']['error'] === 0) {
                 }
             }
 
-            // var_dump($opt_flags); die();
+            var_dump($opt_flags); die();
 
             if (strtoupper(substr(PHP_OS, null, 3)) === 'WIN') {
 

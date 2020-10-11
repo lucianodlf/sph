@@ -30,7 +30,7 @@ if (key_exists('status', $hours_data) && $hours_data['status'] == 0) {
 			'aditional_msg' => $hours_data['msg']
 		));
 		exit();
-	}else{
+	} else {
 		exit();
 	}
 }
@@ -374,22 +374,23 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 				$total_h = $absences_summary[$user_id][$absences_cd->format('d/m/Y')] / 60;
 
 				// Almacena total de horas trabajadas por el usuario para el dia en curso
-				$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = $total_h;
+				$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = (int) $total_h;
 
 				// Elimina el registro de minutos (solo queremos inasistencias en el resumen)
 				//unset($absences_summary[$user_id][$absences_cd->format('d/m/Y')]);
 
 				// Verificamos si es inasistencia parcial
-				if (validateTypeJournal($absences_cd->format('w'), TRUE) > $total_h) {
-					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IP';
+				// if (validateTypeJournal($absences_cd->format('w'), TRUE) > $total_h) {
+				// 	$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'IP';
 
-					// var_dump(validateTypeJournal($absences_cd->format('w')));
-					// var_dump($total_h);die();
-				}
+				// 	// var_dump(validateTypeJournal($absences_cd->format('w')));
+				// 	// var_dump($total_h);die();
+				// }
 			} else {
 
-				// Si no existe la clave y es feriado, no se cuenta inasistencia, si no es feriado, es inasistencia.
 
+
+				// Si no existe la clave y es feriado, no se cuenta inasistencia, si no es feriado, es inasistencia.
 				if (in_array($absences_cd->format('d/m/Y'), CONFIG_PARAMS['FERIADOS'])) {
 
 					$absences_summary[$user_id][$absences_cd->format('d/m/Y')] = 'FF';
@@ -403,7 +404,19 @@ if ($GLOBALS['CONFIG']['SUMMARY-ABSENCES']) {
 		$absences_cd->add(new DateInterval('P1D'));
 	}
 
+
+	foreach ($absences_summary as $user_id => $dates) {
+		foreach ($dates as $date => $value) {
+			$cd = DateTime::createFromFormat('d/m/Y', $date);
+
+			if ($cd < $absences_date_start || $cd > $absences_date_end) {
+				unset($absences_summary[$user_id][$cd->format('d/m/Y')]);
+			}
+		}
+	}
+
 	// var_dump($absences_summary);
+	// die();
 	// var_dump("comienza");
 
 	foreach ($absences_summary as $user_id => $dates) {
