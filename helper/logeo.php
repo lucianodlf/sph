@@ -106,7 +106,7 @@ function debugInitialDataPrepare($hours_data)
 
 
 // For show number and name of day of week
-function debugShowNumberDayOfWeek()
+/* function debugShowNumberDayOfWeek()
 {
 	if ($GLOBALS['CONFIG']['DEBUG_MODE'] && $GLOBALS['CONFIG']['VERBOSE']) {
 
@@ -122,4 +122,4 @@ function debugShowNumberDayOfWeek()
 
 		logeo("=================================================================");
 	}
-}
+} */

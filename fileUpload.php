@@ -60,7 +60,7 @@ if ($_FILES['file']['error'] === 0) {
                 }
             }
 
-            var_dump($opt_flags); die();
+            // var_dump($opt_flags); die();
 
             if (strtoupper(substr(PHP_OS, null, 3)) === 'WIN') {
 
