@@ -54,6 +54,3 @@ por ahora no hay.... ;)
 
 ## Licencia
 Este proyecto esta licenciado bajo MIT License - mirar el achivo LICENSE.md para mas detalles
-
-## Agradecimientos
-@cztomczak por https://github.com/cztomczak/phpdesktop
