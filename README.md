@@ -1,7 +1,6 @@
 # SPH
-### _En desarrollo...._
 
-Una herramienta CLI que autmatiza el desglose de horas trabajadas por el capital humano de una organizacion.
+>Una herramienta CLI que autmatiza el desglose de horas trabajadas por el capital humano de una organizacion.
 
 ## Prerequisitos
 * PHP >= 7.1.0
