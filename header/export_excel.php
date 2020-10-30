@@ -269,12 +269,13 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 		$row_data++;
 	}
 
+	exportSummaryHours($spreadsheet, $arr_summary_hours);
 
 	if ($absences_summary !== NULL) {
 		exportSummaryAbsencesExcel($spreadsheet, $absences_summary, $hours_data);
 	}
 
-	exportSummaryHours($spreadsheet, $arr_summary_hours);
+
 
 
 	$write = IOFactory::createWriter($spreadsheet, 'Xlsx');
@@ -601,7 +602,9 @@ function exportSummaryHours($spreadsheet, $arr_summary_hours)
 			$spreadsheet->getActiveSheet()->getStyle("{$column}{$row_data}")->applyFromArray($style_data_array);
 		}
 		$row_data++;
-	} 
+	}
 
 	$spreadsheet->setActiveSheetIndex(0);
+
+	return $spreadsheet;
 }

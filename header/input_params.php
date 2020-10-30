@@ -8,7 +8,7 @@ Usage:
 	sph.php [-f FILE | --cfg=FILE]
 	sph.php [--verbose] [--not-export-excel] [--i-file=FILE | --i-dir-path=DIR] [--o-file=FILE | --o-dir-path=DIR] 
 		[--date-format-read=FORMAT] [--date-format-show=FORMAT]
-		[--range-read=RANGE] [--sort-order=ORDER]
+		[--range-read=RANGE] [--sort-order=ORDER] [--summary-absences=VALUE]
 	sph.php --debug-mode [--d-user-only=VALUE | --d-max-users=VALUE] [--d-interval-only=VALUE | --d-max-intervals=VALUE]
 	[--d-hidde-log-by-minute] [--d-range-datetime=VALUE] 
 	[--not-export-excel] [--i-file=FILE | --i-dir-path=DIR] [--o-file=FILE | --o-dir-path=DIR] 
