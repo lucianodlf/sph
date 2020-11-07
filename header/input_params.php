@@ -274,7 +274,12 @@ if (is_array($parse_config)) {
 
 		if (key_exists('nsabado', $parse_config['hparams'])) {
 
-			$hconfig['NSABADO'][(int) $parse_config['hparams']['nsabado']];
+			$hconfig['NSABADO'] = [(int) $parse_config['hparams']['nsabado']];
+		}
+
+		if (key_exists('ndomingo', $parse_config['hparams'])) {
+
+			$hconfig['NDOMINGO'] = [(int) $parse_config['hparams']['ndomingo']];
 		}
 	}
 

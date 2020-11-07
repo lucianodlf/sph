@@ -224,10 +224,12 @@ foreach ($hours_data as $user_id => $user) {
 
 			logeo("Hour of day to proccess: " . json_encode($acum_minutes_datetime), $GLOBALS['CONFIG']['DEBUG_HIDDE_LOG_BY_MINUTE']);
 
-			//*************** SI ES SABADO ****************/
-			if ($day_of_week == CONFIG_PARAMS['NSABADO']) {
+			if ($day_of_week == CONFIG_PARAMS['NSABADO'][0]) {
 
 				validateIsDaySabado();
+			} else if ($day_of_week == CONFIG_PARAMS['NDOMINGO'][0]) {
+
+				validateIsDayDomingo();
 			} else {
 
 				//*************** NO ES SABADO ****************/
@@ -259,7 +261,7 @@ foreach ($hours_data as $user_id => $user) {
 		$sum_hours += $minutes_interval_result['nocturnas_n'];
 		$sum_hours += $minutes_interval_result['nocturnas_e'];
 		$sum_hours += $minutes_interval_result['h100'];
-		$sum_hours += $minutes_interval_result['sabadonoth100'];
+		// $sum_hours += $minutes_interval_result['sabadonoth100'];
 
 		if ($sum_hours != $minutes_interval_result['total']) {
 			$minutes_interval_result['alert_sum_hours'] = TRUE;
@@ -667,10 +669,20 @@ function validateIsDaySabado()
 		$minutes_interval_result['h100']++;
 	} else {
 
-		logeo('Hora es diurna (SABADO no al 100%', $GLOBALS['CONFIG']['DEBUG_HIDDE_LOG_BY_MINUTE']);
-		$minutes_interval_result['sabadonoth100']++;
-		$minutes_interval_result['diurna_e']++;
+		logeo('Hora es diurna (SABADO no al 100%)', $GLOBALS['CONFIG']['DEBUG_HIDDE_LOG_BY_MINUTE']);
+		// $minutes_interval_result['sabadonoth100']++;
+		$minutes_interval_result['diurnas_e']++;
 	}
+}
+
+
+function validateIsDayDomingo()
+{
+	global $current_params, $acum_minutes_datetime, $minutes_interval_result;
+
+	logeo('Day is DOMINGO', $GLOBALS['CONFIG']['DEBUG_HIDDE_LOG_BY_MINUTE']);
+
+	$minutes_interval_result['h100']++;
 }
 
 

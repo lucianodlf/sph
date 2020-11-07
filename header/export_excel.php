@@ -220,6 +220,8 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 				'P' => ($interval['input']['is_date_fixed']) ? "SI" : "",
 			];
 
+			// Calculamos el resumen de horas 
+			//TODO: Tendriamos que separar el calculo de este lugar, que solo maneje la exportacion a excel.
 			$arr_summary_hours[$user_id] = [
 				'A' => (string) $user_id,
 				'B' => (string) $interval['input']['name'],
@@ -228,9 +230,10 @@ function exportExcel($hours_data, $export_file, $absences_summary = NULL)
 				'E' => $arr_summary_hours[$user_id]['E'] + $interval['RESULT']['nocturnas_n'],
 				'F' => $arr_summary_hours[$user_id]['F'] + $interval['RESULT']['nocturnas_e'],
 				'G' => $arr_summary_hours[$user_id]['G'] + $interval['RESULT']['h100'],
-				'H' => $arr_summary_hours[$user_id]['H'] + ($interval['input']['is_feriado'] || $interval['output']['is_feriado']) ? 1 : 0,
+				'H' => $arr_summary_hours[$user_id]['H'] + (($interval['input']['is_feriado'] || $interval['output']['is_feriado']) ? 1 : 0),
 				'I' => $arr_summary_hours[$user_id]['I'] + $interval['RESULT']['total'],
 			];
+
 		}
 	}
 

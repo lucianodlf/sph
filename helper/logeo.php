@@ -58,7 +58,7 @@ function debugShowRersumen($hours_interval_result)
 		logeo('Nocturnas Normales: ' . ($hours_interval_result['nocturnas_n']));
 		logeo('Nocturnas Extras: ' . ($hours_interval_result['nocturnas_e']));
 		logeo('Horas al 100%: ' . ($hours_interval_result['h100']));
-		logeo('Horas sabado NO 100%: ' . ($hours_interval_result['sabadonoth100']));
+		// logeo('Horas sabado NO 100%: ' . ($hours_interval_result['sabadonoth100']));
 		logeo('ALERTA MAX HORAS: ' . ($hours_interval_result['alert_max_hours']));
 		logeo('ALERTA SUMA HORAS: ' . ($hours_interval_result['alert_sum_hours']));
 		logeo('=========================================================================================');
