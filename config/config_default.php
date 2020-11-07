@@ -90,7 +90,8 @@ function getDefaultConfigParams()
 	$hconfig['JLDIF_D'] = [5]; // Jornada laboral diferencial: numero de dia de la semana
 	$hconfig['JLDIF_HS'] = [8];
 	$hconfig['NSABADO'] = [6]; // Numero de dia de la semana para sabado
-	$hconfig['FERIADOS'] = ['15/01/2020'];
+	$hconfig['NDOMINGO'] = [0]; // Numero de dia de la semana para domingo
+	$hconfig['FERIADOS'] = ['17/01/2020,18/01/2020']; //TODO: Datos cargados a modo de ejemplo para verificar calculos. se sobreescriben desde sph.ini
 	$hconfig['MAX_HOURS_BY_INTERVAL_ALERT'] = [12]; // Numero maximo de horas en un intervalo para alertar
 
 	return $hconfig;
